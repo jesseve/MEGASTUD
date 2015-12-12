@@ -17,7 +17,7 @@ public abstract class EnemyUnitBase : Unit
         enemyUnits = new List<IDamageable>();
 
         playerHQ = GameObject.FindGameObjectWithTag("PlayerHQ").GetComponent<BuildingBase>();
-        StartAttack(playerHQ);
+        StartMoving(playerHQ.GetPosition());
 
         foreach (GameObject g in gos) {
             Unit u = g.GetComponent<Unit>();
@@ -27,6 +27,7 @@ public abstract class EnemyUnitBase : Unit
     }
     protected override void EndMove()
     {
+        base.EndMove();
         if (unitToAttack != null) {
             float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
             if (dst < range)

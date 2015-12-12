@@ -33,6 +33,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected bool isAttacking;
     protected float attackTimer;
     protected bool movingToTarget;
+    protected int sqrRange;
 
     //Components
     protected Transform _transform;
@@ -45,13 +46,13 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _animator = GetComponent<Animator>();
         speed *= Time.fixedDeltaTime;
 
+        sqrRange = range * range;
         enemyUnits = new List<IDamageable>();
 
-        visionRange = visionRange * visionRange;
-        range = range * range;
     }
     protected virtual void FixedUpdate()
     {
+        SearchForTarget();
         if (isMoving == true)
             Move();
         else if (isAttacking == true)
@@ -74,16 +75,15 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _transform.position = Vector2.MoveTowards(_transform.position, targetPoint, speed);
         if (_transform.position == targetPoint)
         {
-            isMoving = false;
-            SetAnimator("isMoving", isMoving);
             EndMove();
         }
     }
-    public void HandleSelection(bool selected) { }
+    
     protected virtual void EndMove() {
-
+        isMoving = false;
+        SetAnimator("isMoving", isMoving);
     }
-
+    public void HandleSelection(bool selected) { }
     public virtual void StartAttack(IDamageable target)
     {
         isAttacking = true;
@@ -109,16 +109,21 @@ public abstract class Unit : MonoBehaviour, IDamageable
                 isAttacking = false;
                 SetAnimator("isAttacking", isAttacking);
             }
-
         }
     }
     protected void SearchForTarget()
     {
-        Collider2D c = Physics2D.OverlapCircle(_transform.position, range, attackLayer);
+        Collider2D c = Physics2D.OverlapCircle(_transform.position, visionRange, attackLayer);
         if (c != null)
         {
-            unitToAttack = c.GetComponent<IDamageable>();
-            StartMoving(unitToAttack.GetPosition());
+            EndMove();
+            IDamageable id = c.GetComponent<IDamageable>();
+            if (id == null) { Debug.Log("IDamageable null"); return; }
+
+            if ((id.GetPosition() - _transform.position).sqrMagnitude < sqrRange)
+                StartAttack(c.GetComponent<IDamageable>());
+            else
+                StartMoving(id.GetPosition());
         }
     }
     public void RegisterEnemy(IDamageable enemy)
