@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour {
 	public bool CheckResourceAvailability(float money, float energy)
 	{
 		if(money > moneyAmount || energy > energyAmount)
-			return false;return true;		
+			return false;
 
 		return true;
 	}

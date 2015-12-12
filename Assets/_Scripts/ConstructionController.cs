@@ -20,13 +20,14 @@ public class ConstructionController : MonoBehaviour {
 
 	private Camera mainCam;
 	private GameController gameController;
+	private UnitController unitController;
 
 	private bool initialized = true;
-
 	void Start()
 	{
 		mainCam = Camera.main;
 		gameController = GetComponent<GameController>();
+		unitController = GetComponent<UnitController>();
 	}
 
 	void Update()
@@ -80,7 +81,7 @@ public class ConstructionController : MonoBehaviour {
 
 	public void ConstructNewBuilding(int type)
 	{
-		if(currentBuilding != null)
+		if(currentBuilding != null || unitController.CheckMouseAvailability())
 			return;
 		
 		currentBuilding = Instantiate(buildingPrefabs[type]) as BuildingBase;
@@ -100,6 +101,11 @@ public class ConstructionController : MonoBehaviour {
 		ghostBuilding.enabled = false;
 		initialized = false;
 
+	}
+
+	public bool CheckMouseAvailability()
+	{
+		return currentBuilding == null;
 	}
 
 	private void CancelBuilding() 
