@@ -20,6 +20,9 @@ public class ResourceBuilding : BuildingBase {
 	protected override void Update()
 	{
 		base.Update();
+		if(underConstruction)
+			return;
+		
 		timer -= Time.deltaTime;
 
 		if(timer <= 0f)
