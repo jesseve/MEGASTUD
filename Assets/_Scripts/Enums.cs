@@ -2,4 +2,4 @@
 using System.Collections;
 
 public enum ResourceType{Money, Energy}
-public enum BuildingType{Resource, Offensive, Defensive}
+public enum BuildingType{None = -1, Resource, Offensive, Defensive}
