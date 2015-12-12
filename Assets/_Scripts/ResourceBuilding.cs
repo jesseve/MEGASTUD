@@ -18,7 +18,7 @@ public class ResourceBuilding : BuildingBase {
 		timer = productionTime;
 	}
 
-	override void Update()
+	protected override void Update()
 	{
 		base.Update();
 		timer -= Time.deltaTime;
