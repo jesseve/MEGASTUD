@@ -3,26 +3,44 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public abstract class EnemyBase : MonoBehaviour
+public abstract class SpawningBuilding : BuildingBase
 {
 
     //public members
-    public EnemyUnitBase[] enemyTypesToUse;    
+    public EnemyUnitBase[] unitTypesToUse;
+    public float spawnRate;
+    public int spawnCount;
 
     //protected members
-    protected List<EnemyUnitBase> FreeEnemies;
-    protected List<EnemyUnitBase> ActiveEnemies;
+    [SerializeField]protected List<EnemyUnitBase> FreeEnemies;
+    [SerializeField]protected List<EnemyUnitBase> ActiveEnemies;
+
+    protected float spawnTimer;
 
     //Unity methods
-    protected void Start() {
+    protected override void Start() {
+        base.Start();
         CreateEnemyPool();
+    }
+    protected override void Update()
+    {
+        base.Update();
+        spawnTimer += Time.deltaTime;
+        if (spawnTimer >= spawnRate) {
+            SpawnEnemy(unitTypesToUse[UnityEngine.Random.Range(0, unitTypesToUse.Length)], transform.position);
+            spawnTimer = 0;
+        }
     }
 
     //public methods
-    public void SpawnEnemy(EnemyType type, Vector3 position) {
-        EnemyUnitBase enemy = PullFromPool(type);
-        enemy.Spawn();
-        enemy.transform.position = position;
+    public void SpawnEnemy(EnemyUnitBase type, Vector3 position)
+    {
+        for (int i = 0; i < spawnCount; i += type.size)
+        {
+            EnemyUnitBase enemy = PullFromPool(type.type);
+            enemy.Spawn();
+            enemy.transform.position = position;
+        }
     }
 
     //protected methods
@@ -31,9 +49,9 @@ public abstract class EnemyBase : MonoBehaviour
         FreeEnemies = new List<EnemyUnitBase>();
         ActiveEnemies = new List<EnemyUnitBase>();
 
-        for (int i = 0; i < enemyTypesToUse.Length; i++) {
+        for (int i = 0; i < unitTypesToUse.Length; i++) {
             for (int j = 0; j < 20; j++) {
-                EnemyUnitBase e = CreateEnemy(enemyTypesToUse[i].type);
+                EnemyUnitBase e = CreateEnemy(unitTypesToUse[i].type);
                 FreeEnemies.Add(e);
                 e.gameObject.SetActive(false);
             }
@@ -44,7 +62,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected EnemyUnitBase PullFromPool(EnemyType type) {
 
         for (int i = 0; i < FreeEnemies.Count; i++) {
-            EnemyUnitBase e = FreeEnemies[0];
+            EnemyUnitBase e = FreeEnemies[i];
             if (e.type == type) {
                 ActiveEnemies.Add(e);
                 FreeEnemies.Remove(e);
@@ -64,11 +82,13 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     protected EnemyUnitBase CreateEnemy(EnemyType type) {
-        foreach (EnemyUnitBase e in enemyTypesToUse)
+        foreach (EnemyUnitBase e in unitTypesToUse)
         {
             if (e.type == type)
             {
                 GameObject go = Instantiate(e.gameObject) as GameObject;
+                go.tag = tag;
+                go.transform.SetParent(transform);
                 return go.GetComponent<EnemyUnitBase>();
             }
         }

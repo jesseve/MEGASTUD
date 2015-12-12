@@ -12,6 +12,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public float damage;
     public float health;
     public float speed;
+    public float fireRate;
     public UnitType unitType;
     public bool isPlayerControlled;
 
@@ -19,13 +20,13 @@ public abstract class Unit : MonoBehaviour, IDamageable
     
     //Movement
     protected Vector3 targetPoint;
-    [SerializeField]protected bool isMoving;
+    protected bool isMoving;
 
     //Attacking    
     protected IDamageable unitToAttack;
     protected List<IDamageable> enemyUnits;
-    [SerializeField]
     protected bool isAttacking;
+    protected float attackTimer;
 
     //Components
     protected Transform _transform;
@@ -35,7 +36,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
     {
         _transform = transform;
         speed *= Time.fixedDeltaTime;
-        damage *= Time.fixedDeltaTime;
 
         enemyUnits = new List<IDamageable>();
 
@@ -85,10 +85,20 @@ public abstract class Unit : MonoBehaviour, IDamageable
         float dst = (ePos - _transform.position).sqrMagnitude;
         if (dst < range)
         {
-            unitToAttack.TakeDamage(damage);
+            attackTimer += Time.fixedDeltaTime;
+            if (attackTimer >= fireRate)
+            {
+                attackTimer = 0;
+                if (unitToAttack.TakeDamage(damage) == true) {
+                    unitToAttack = null;
+                    isAttacking = false;
+                }
+                
+            }
         }
         else {
-            Vector2.MoveTowards(_transform.position, ePos, speed);
+            attackTimer = fireRate;
+            _transform.position = Vector2.MoveTowards(_transform.position, ePos, speed);
         }               
     }
     public void RegisterEnemy(IDamageable enemy)
@@ -99,9 +109,18 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public abstract void Spawn();
 
     //IDamageable implementation
-    public virtual void TakeDamage(float damage)
+
+    //Return true if the object died
+    public virtual bool TakeDamage(float damage)
     {
+        health -= damage;
+        if (health <= 0)
+        {            
+            Die();
+            return true;
+        }
         Debug.Log(gameObject.name + " took " + damage + " damage!");
+        return false;
     }
     public Vector3 GetPosition() {
         return _transform.position;

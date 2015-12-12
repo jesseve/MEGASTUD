@@ -25,8 +25,18 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         currentLevel++;
     }
 
-    public void TakeDamage(float damage) {
+    //IDamageable implementation
 
+    public bool TakeDamage(float damage) {
+        health -= damage;
+        if (health <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public void Die() { }
     public Vector3 GetPosition() {

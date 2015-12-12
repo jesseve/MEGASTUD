@@ -3,9 +3,10 @@ using System.Collections;
 
 public class NormalEnemy : EnemyBase {
 
-    void Update() {
+    protected override void Update() {
+        base.Update();
         if (Input.GetMouseButtonDown(0)) {
-            SpawnEnemy(enemyTypesToUse[0].type, Vector3.zero);
+            SpawnEnemy(unitTypesToUse[0], Vector3.zero);
         }
     }
 }
