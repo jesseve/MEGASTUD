@@ -72,8 +72,7 @@ public class CameraController : MonoBehaviour {
 	{
 		Vector3 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 		Vector3 camPos = mainCam.transform.position;
-		if(Input.GetMouseButtonDown(0))
-			Debug.Log("MOUSE: " +mousePos);
+
 		float xMin = camPos.x - camHorizontal;
 		float xMax = camPos.x + camHorizontal;
 		float yMin = camPos.y - camVertical;
