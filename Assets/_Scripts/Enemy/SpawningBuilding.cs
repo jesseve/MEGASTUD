@@ -27,19 +27,21 @@ public abstract class SpawningBuilding : BuildingBase
         base.Update();
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnRate) {
-            SpawnUnits(unitTypesToUse[UnityEngine.Random.Range(0, unitTypesToUse.Length)], transform.position);
+            Spawn();
             spawnTimer = 0;
         }
     }
-
+    public virtual void Spawn() {
+        SpawnUnits(unitTypesToUse[UnityEngine.Random.Range(0, unitTypesToUse.Length)]);
+    }
     //public methods
-    public virtual void SpawnUnits(Unit type, Vector3 position)
+    public virtual void SpawnUnits(Unit type)
     {
         for (int i = 0; i < spawnCount; i += type.size)
         {
             Unit unit = PullFromPool(type.unitType);
             unit.Spawn();
-            unit.transform.position = position;
+            unit.transform.position = transform.position;
         }
     }
 

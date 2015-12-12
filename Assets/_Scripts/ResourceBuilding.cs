@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum ResourceType{Money, Energy}
 public class ResourceBuilding : BuildingBase {
 
 	public ResourceType resourceType = ResourceType.Money;

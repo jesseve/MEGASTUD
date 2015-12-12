@@ -28,24 +28,29 @@ public abstract class Unit : MonoBehaviour, IDamageable
     //Attacking    
     protected IDamageable unitToAttack;
     protected List<IDamageable> enemyUnits;
+    [SerializeField]
     protected bool isAttacking;
     protected float attackTimer;
+    protected bool movingToTarget;
 
     //Components
     protected Transform _transform;
+    protected Animator _animator;
 
     // Use this for initialization
     protected virtual void Awake()
     {
         _transform = transform;
+        _animator = GetComponent<Animator>();
         speed *= Time.fixedDeltaTime;
 
         enemyUnits = new List<IDamageable>();
 
         visionRange = visionRange * visionRange;
         range = range * range;
-    }    
-    protected virtual void FixedUpdate() {
+    }
+    protected virtual void FixedUpdate()
+    {
         if (isMoving == true)
             Move();
         else if (isAttacking == true)
@@ -54,55 +59,71 @@ public abstract class Unit : MonoBehaviour, IDamageable
             Patrol();
     }
 
+    protected void SetAnimator(string parameter, bool value) {
+        if (_animator != null)
+            _animator.SetBool(parameter, value);
+    }
+
     public void StartMoving(Vector3 point)
     {
         targetPoint = point;
         isMoving = true;
+        SetAnimator("isMoving", isMoving);
     }
     public void Move()
     {
-        Vector2.MoveTowards(_transform.position, targetPoint, speed);
+        _transform.position = Vector2.MoveTowards(_transform.position, targetPoint, speed);
         if (_transform.position == targetPoint)
+        {
             isMoving = false;
+            SetAnimator("isMoving", isMoving);
+        }
     }
-    protected virtual void Patrol() {
-        if (enemyUnits == null) return;     
-        foreach (IDamageable e in enemyUnits) {            
+    protected virtual void Patrol()
+    {
+        if (enemyUnits == null) return;
+        foreach (IDamageable e in enemyUnits)
+        {
             float dst = (e.GetPosition() - _transform.position).sqrMagnitude;
-            if (dst < visionRange) {
-                StartAttack(e);
+
+            if (dst < visionRange)
+            {
+                StartAttack(e, dst < range);
                 break;
             }
         }
     }
 
-    public virtual void StartAttack(IDamageable target) {
-        isAttacking = true;
+    public virtual void StartAttack(IDamageable target, bool inAttackRange)
+    {
+        Vector3 vec = (target.GetPosition() - _transform.position);
+        vec = vec.normalized * (vec.magnitude - Mathf.Sqrt(range));
+        isAttacking = inAttackRange;
+        SetAnimator("isAttacking", isAttacking);
+
+        
+        StartMoving(vec);
+        
         unitToAttack = target;
     }
-    public virtual void Attack() {        
+    
+    public virtual void Attack()
+    {
         if (unitToAttack == null) return;
 
         //Check if the unit is in range to attack
-        Vector3 ePos = unitToAttack.GetPosition();
-        float dst = (ePos - _transform.position).sqrMagnitude;
-        if (dst < range)
+        attackTimer += Time.fixedDeltaTime;
+
+        if (attackTimer >= fireRate)
         {
-            attackTimer += Time.fixedDeltaTime;
-            if (attackTimer >= fireRate)
+            attackTimer = 0;
+            if (unitToAttack.TakeDamage(damage) == true)
             {
-                attackTimer = 0;
-                if (unitToAttack.TakeDamage(damage) == true) {
-                    unitToAttack = null;
-                    isAttacking = false;
-                }
-                
+                unitToAttack = null;
+                isAttacking = false;
             }
+
         }
-        else {
-            attackTimer = fireRate;
-            _transform.position = Vector2.MoveTowards(_transform.position, ePos, speed);
-        }               
     }
     public void RegisterEnemy(IDamageable enemy)
     {
@@ -118,23 +139,19 @@ public abstract class Unit : MonoBehaviour, IDamageable
     {
         health -= damage;
         if (health <= 0)
-        {            
+        {
             Die();
             return true;
         }
         Debug.Log(gameObject.name + " took " + damage + " damage!");
         return false;
     }
-    public Vector3 GetPosition() {
+    public Vector3 GetPosition()
+    {
         return _transform.position;
     }
-    public void Die() {
+    public void Die()
+    {
         Debug.Log(gameObject.name + " DIED!");
     }
-}
-
-public enum UnitType {
-    Unit1,
-    Unit2,
-    Unit3
 }
