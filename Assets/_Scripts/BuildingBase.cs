@@ -42,7 +42,12 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
             return false;
         }
     }
-    public void Die() { }
+    public void Die() {
+        gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+    public bool IsDead() {
+        return health <= 0;
+    }
     public Vector3 GetPosition() {
         return _transform.position;
     }

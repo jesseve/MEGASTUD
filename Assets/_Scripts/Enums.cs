@@ -8,3 +8,9 @@ public enum UnitType
     Attack,
     Defence,
 }
+public enum EnemyType
+{
+    Enemy1,
+    Enemy2,
+    Enemy3
+}

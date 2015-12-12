@@ -28,7 +28,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     //Attacking    
     protected IDamageable unitToAttack;
-    protected List<IDamageable> enemyUnits;
     [SerializeField]
     protected bool isAttacking;
     protected float attackTimer;
@@ -47,8 +46,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
         speed *= Time.fixedDeltaTime;
 
         sqrRange = range * range;
-        enemyUnits = new List<IDamageable>();
-
     }
     protected virtual void FixedUpdate()
     {
@@ -111,8 +108,9 @@ public abstract class Unit : MonoBehaviour, IDamageable
             }
         }
     }
-    protected void SearchForTarget()
+    protected virtual void SearchForTarget()
     {
+        if (unitToAttack != null) return;
         Collider2D c = Physics2D.OverlapCircle(_transform.position, visionRange, attackLayer);
         if (c != null)
         {
@@ -120,16 +118,15 @@ public abstract class Unit : MonoBehaviour, IDamageable
             IDamageable id = c.GetComponent<IDamageable>();
             if (id == null) { Debug.Log("IDamageable null"); return; }
 
-            if ((id.GetPosition() - _transform.position).sqrMagnitude < sqrRange)
-                StartAttack(c.GetComponent<IDamageable>());
-            else
-                StartMoving(id.GetPosition());
+            if (id.IsDead() == false && isAttacking == false)
+            {
+                if ((id.GetPosition() - _transform.position).sqrMagnitude < sqrRange)
+                    StartAttack(c.GetComponent<IDamageable>());
+                else if(isMoving == false)
+                    StartMoving(id.GetPosition());
+            }
         }
-    }
-    public void RegisterEnemy(IDamageable enemy)
-    {
-        enemyUnits.Add(enemy);
-    }
+    }    
 
     public abstract void Spawn();
 
@@ -153,6 +150,12 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void Die()
     {
+        gameObject.layer = LayerMask.NameToLayer("Default");
         Debug.Log(gameObject.name + " DIED!");
     }
+    public bool IsDead()
+    {
+        return health <= 0;
+    }
+
 }

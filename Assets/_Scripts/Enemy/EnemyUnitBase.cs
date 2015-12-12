@@ -12,25 +12,15 @@ public abstract class EnemyUnitBase : Unit
             
     public override void Spawn()
     {
-        GameObject[] gos = GameObject.FindGameObjectsWithTag("PlayerUnit");
-
-        enemyUnits = new List<IDamageable>();
-
         playerHQ = GameObject.FindGameObjectWithTag("PlayerHQ").GetComponent<BuildingBase>();
         StartMoving(playerHQ.GetPosition());
-
-        foreach (GameObject g in gos) {
-            Unit u = g.GetComponent<Unit>();
-            u.RegisterEnemy(this);
-            enemyUnits.Add(u);
-        }
     }
     protected override void EndMove()
     {
         base.EndMove();
         if (unitToAttack != null) {
             float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
-            if (dst < range)
+            if (dst < sqrRange)
             {
                 StartAttack(unitToAttack);
             }
@@ -39,5 +29,26 @@ public abstract class EnemyUnitBase : Unit
                 StartMoving(playerHQ.GetPosition());
             }
         }
+    }
+    protected override void SearchForTarget()
+    {
+        if (unitToAttack != null) return;
+        Collider2D c = Physics2D.OverlapCircle(_transform.position, visionRange, attackLayer);
+        if (c != null)
+        {
+            base.EndMove();
+            IDamageable id = c.GetComponent<IDamageable>();
+            if (id == null) { Debug.Log("IDamageable null"); return; }
+
+            if (id.IsDead() == false && isAttacking == false)
+            {
+                if ((id.GetPosition() - _transform.position).sqrMagnitude < sqrRange)
+                    StartAttack(c.GetComponent<IDamageable>());
+                else if (isMoving == false)
+                    StartMoving(id.GetPosition());
+                return;
+            }
+        }
+        StartMoving(playerHQ.GetPosition());
     }
 }

@@ -7,13 +7,15 @@ public abstract class SpawningBuilding : BuildingBase
 {
 
     //public members
-    public Unit[] unitTypesToUse;
+    public Unit[] unitTypesToUse;    
     public float spawnRate;
     public int spawnCount;
 
     //protected members
     [SerializeField]protected List<Unit> FreeUnits;
     [SerializeField]protected List<Unit> ActiveUnits;
+    protected UnitType type;
+    protected Unit unitToUse;
 
     protected float spawnTimer;
 
@@ -32,7 +34,7 @@ public abstract class SpawningBuilding : BuildingBase
         }
     }
     public virtual void Spawn() {
-        SpawnUnits(unitTypesToUse[UnityEngine.Random.Range(0, unitTypesToUse.Length)]);
+        SpawnUnits(unitToUse);
     }
     //public methods
     public virtual void SpawnUnits(Unit type)
@@ -46,17 +48,26 @@ public abstract class SpawningBuilding : BuildingBase
     }
 
     //protected methods
-    protected void CreateUnitPool() {
+    protected virtual void CreateUnitPool() {
+
+        if (buildinType == BuildingType.OffensiveSpawner)
+            type = UnitType.Attack;
+        else if (buildinType == BuildingType.DefensiveSpawner)
+            type = UnitType.Defence;
+
+        for (int i = 0; i < unitTypesToUse.Length; i++) {
+            if (unitTypesToUse[i].unitType == type)
+                unitToUse = unitTypesToUse[i];
+        }
 
         FreeUnits = new List<Unit>();
         ActiveUnits = new List<Unit>();
 
-        for (int i = 0; i < unitTypesToUse.Length; i++) {
-            for (int j = 0; j < 20; j++) {
-                Unit e = CreateEnemy(unitTypesToUse[i].unitType);
-                FreeUnits.Add(e);
-                e.gameObject.SetActive(false);
-            }
+        for (int j = 0; j < 20; j++)
+        {
+            Unit e = CreateEnemy(unitToUse.unitType);
+            FreeUnits.Add(e);
+            e.gameObject.SetActive(false);
         }
     }
 
@@ -96,10 +107,4 @@ public abstract class SpawningBuilding : BuildingBase
         }
         return null;
     }
-}
-
-public enum EnemyType {
-    Enemy1,
-    Enemy2,
-    Enemy3
 }
