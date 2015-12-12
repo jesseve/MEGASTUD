@@ -81,7 +81,7 @@ public class ConstructionController : MonoBehaviour {
 
 	public void ConstructNewBuilding(int type)
 	{
-		if(currentBuilding != null || unitController.CheckMouseAvailability())
+		if(currentBuilding != null || !unitController.CheckMouseAvailability())
 			return;
 		
 		currentBuilding = Instantiate(buildingPrefabs[type]) as BuildingBase;
