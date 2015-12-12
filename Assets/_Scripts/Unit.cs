@@ -16,8 +16,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public UnitType unitType;
     public bool isPlayerControlled;
 
+    [Range(1, 4)]
+    public int size = 1;        //determine how many can be spawned by the ai
+
     //protected members
-    
+
     //Movement
     protected Vector3 targetPoint;
     protected bool isMoving;

@@ -4,6 +4,8 @@ using System.Collections;
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
     public float health;
+    public float moneyCost = 0;
+    public float energyCost = 0;
 
     protected int currentLevel;
     
