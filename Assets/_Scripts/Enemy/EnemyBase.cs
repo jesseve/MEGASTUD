@@ -19,8 +19,10 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     //public methods
-    public void SpawnEnemy() {
-
+    public void SpawnEnemy(EnemyType type, Vector3 position) {
+        EnemyUnitBase enemy = PullFromPool(type);
+        enemy.Spawn();
+        enemy.transform.position = position;
     }
 
     //protected methods
@@ -31,8 +33,9 @@ public abstract class EnemyBase : MonoBehaviour
 
         for (int i = 0; i < enemyTypesToUse.Length; i++) {
             for (int j = 0; j < 20; j++) {
-                GameObject go = Instantiate(enemyTypesToUse[i].gameObject) as GameObject;
-                FreeEnemies.Add(go.GetComponent<EnemyUnitBase>());
+                EnemyUnitBase e = CreateEnemy(enemyTypesToUse[i].type);
+                FreeEnemies.Add(e);
+                e.gameObject.SetActive(false);
             }
         }
     }
@@ -45,6 +48,7 @@ public abstract class EnemyBase : MonoBehaviour
             if (e.type == type) {
                 ActiveEnemies.Add(e);
                 FreeEnemies.Remove(e);
+                e.gameObject.SetActive(true);
                 return e;
             }
         }
@@ -56,6 +60,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected void PushToPool(EnemyUnitBase enemy) {
         ActiveEnemies.Remove(enemy);
         FreeEnemies.Add(enemy);
+        enemy.gameObject.SetActive(false);
     }
 
     protected EnemyUnitBase CreateEnemy(EnemyType type) {

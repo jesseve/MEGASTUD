@@ -5,4 +5,5 @@ public interface IDamageable
 {
 	void TakeDamage(float damage);
     Vector3 GetPosition();
+    void Die();
 }

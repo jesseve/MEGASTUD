@@ -1,19 +1,25 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public abstract class EnemyUnitBase : Unit
 {
     public EnemyType type;
     public string enemyName;
 
-    protected override void Start()
+        
+    public override void Spawn()
     {
-        base.Start();
-    }
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("PlayerUnit");
 
-    public override void TakeDamage(float damage)
-    {
-        base.TakeDamage(damage);
+        enemyUnits = new List<IDamageable>();
+
+        foreach (GameObject g in gos) {
+            Unit u = g.GetComponent<Unit>();
+            Debug.Log("U is null " + (enemyUnits == null));
+            u.RegisterEnemy(this);
+            enemyUnits.Add(u);
+        }
     }
 }
