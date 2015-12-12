@@ -5,12 +5,26 @@ public class CameraController : MonoBehaviour {
 
 	public float scrollSpeed = 10f;
 	public float moveZoneThreshold = 2.5f;
+	public BoxCollider2D terrainCollider;
 
 	private Camera mainCam;
+	private float xMinClamp;
+	private float xMaxClamp;
+	private float yMinClamp;
+	private float yMaxClamp;
+
+	private float camVertical;
+	private float camHorizontal;
 
 	// Use this for initialization
 	void Start () {
 		mainCam = Camera.main;
+		camVertical = mainCam.orthographicSize;
+		camHorizontal = mainCam.orthographicSize * Screen.width / Screen.height;
+		xMinClamp = terrainCollider.transform.position.x - terrainCollider.bounds.extents.x + camHorizontal;
+		xMaxClamp = terrainCollider.transform.position.x + terrainCollider.bounds.extents.x - camHorizontal;
+		yMinClamp = terrainCollider.transform.position.y - terrainCollider.bounds.extents.y + camVertical;
+		yMaxClamp = terrainCollider.transform.position.y + terrainCollider.bounds.extents.y - camVertical;
 	}
 	
 	// Update is called once per frame
@@ -21,11 +35,17 @@ public class CameraController : MonoBehaviour {
 
 	private void CheckScrolling()
 	{
-		Vector3 mousePos = Input.mousePosition;
-		float xMin = mainCam.transform.position.x;
-		float xMax = xMin + mainCam.pixelWidth;
-		float yMin = mainCam.transform.position.y;
-		float yMax = yMin + mainCam.pixelHeight;
+		Vector3 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 camPos = mainCam.transform.position;
+		Debug.Log("CAM: " + camPos);
+		if(Input.GetMouseButtonDown(0))
+			Debug.Log("MOUSE: " + mousePos);
+		float xMin = camPos.x - camHorizontal;
+		float xMax = camPos.x + camHorizontal;
+		float yMin = camPos.y - camVertical;
+		float yMax = camPos.y + camVertical;
+
+		Debug.Log("xMin: " + xMin+  ", xMax: "+ xMax + ", yMin: " +yMin +", yMax: " + yMax);
 
 		Vector3 moveVector = Vector3.zero;
 
@@ -54,5 +74,9 @@ public class CameraController : MonoBehaviour {
 		}
 
 		mainCam.transform.Translate(moveVector * scrollSpeed * Time.deltaTime);
+		Vector3 newPos = mainCam.transform.position;
+		newPos.x = Mathf.Clamp(newPos.x, xMinClamp, xMaxClamp);
+		newPos.y = Mathf.Clamp(newPos.y, yMinClamp, yMaxClamp);
+		mainCam.transform.position = newPos;
 	}
 }
