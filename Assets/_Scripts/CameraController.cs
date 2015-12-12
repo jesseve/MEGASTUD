@@ -91,7 +91,7 @@ public class CameraController : MonoBehaviour {
 			moveVector.x = 1;
 		}
 
-		if(mousePos.y >= yMin && mousePos.y <= (yMin + moveZoneThreshold))
+		if(mousePos.y >= yMin && mousePos.y <= (yMin + moveZoneThreshold + 1f))
 		{
 			moveVector.y = -1;
 		}

@@ -7,6 +7,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public float health;
     public float moneyCost = 0;
     public float energyCost = 0;
+	public bool underConstruction = false;
 
     protected int currentLevel;
     
@@ -21,7 +22,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	
 	// Update is called once per frame
 	protected virtual void Update () {
-	
+		
 	}
 
     public virtual void Upgrade() {
