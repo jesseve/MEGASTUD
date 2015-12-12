@@ -7,7 +7,6 @@ public abstract class EnemyUnitBase : Unit
 {
     public EnemyType type;
     public string enemyName;
-
         
     public override void Spawn()
     {
@@ -17,7 +16,6 @@ public abstract class EnemyUnitBase : Unit
 
         foreach (GameObject g in gos) {
             Unit u = g.GetComponent<Unit>();
-            Debug.Log("U is null " + (enemyUnits == null));
             u.RegisterEnemy(this);
             enemyUnits.Add(u);
         }
