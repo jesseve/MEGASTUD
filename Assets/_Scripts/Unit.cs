@@ -15,6 +15,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public float fireRate;
     public UnitType unitType;
     public bool isPlayerControlled;
+    public LayerMask attackLayer;
 
     [Range(1, 4)]
     public int size = 1;        //determine how many can be spawned by the ai
@@ -55,8 +56,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
             Move();
         else if (isAttacking == true)
             Attack();
-        else
-            Patrol();
     }
 
     protected void SetAnimator(string parameter, bool value) {
@@ -77,33 +76,20 @@ public abstract class Unit : MonoBehaviour, IDamageable
         {
             isMoving = false;
             SetAnimator("isMoving", isMoving);
+            EndMove();
         }
     }
-    protected virtual void Patrol()
-    {
-        if (enemyUnits == null) return;
-        foreach (IDamageable e in enemyUnits)
-        {
-            float dst = (e.GetPosition() - _transform.position).sqrMagnitude;
+    public void HandleSelection(bool selected) { }
+    protected virtual void EndMove() {
 
-            if (dst < visionRange)
-            {
-                StartAttack(e, dst < range);
-                break;
-            }
-        }
     }
 
-    public virtual void StartAttack(IDamageable target, bool inAttackRange)
+    public virtual void StartAttack(IDamageable target)
     {
-        Vector3 vec = (target.GetPosition() - _transform.position);
-        vec = vec.normalized * (vec.magnitude - Mathf.Sqrt(range));
-        isAttacking = inAttackRange;
+        isAttacking = true;
         SetAnimator("isAttacking", isAttacking);
 
-        
-        StartMoving(vec);
-        
+        attackTimer = fireRate;
         unitToAttack = target;
     }
     
@@ -121,8 +107,18 @@ public abstract class Unit : MonoBehaviour, IDamageable
             {
                 unitToAttack = null;
                 isAttacking = false;
+                SetAnimator("isAttacking", isAttacking);
             }
 
+        }
+    }
+    protected void SearchForTarget()
+    {
+        Collider2D c = Physics2D.OverlapCircle(_transform.position, range, attackLayer);
+        if (c != null)
+        {
+            unitToAttack = c.GetComponent<IDamageable>();
+            StartMoving(unitToAttack.GetPosition());
         }
     }
     public void RegisterEnemy(IDamageable enemy)

@@ -17,12 +17,26 @@ public abstract class EnemyUnitBase : Unit
         enemyUnits = new List<IDamageable>();
 
         playerHQ = GameObject.FindGameObjectWithTag("PlayerHQ").GetComponent<BuildingBase>();
-        StartAttack(playerHQ, false);
+        StartAttack(playerHQ);
 
         foreach (GameObject g in gos) {
             Unit u = g.GetComponent<Unit>();
             u.RegisterEnemy(this);
             enemyUnits.Add(u);
+        }
+    }
+    protected override void EndMove()
+    {
+        if (unitToAttack != null) {
+            float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
+            if (dst < range)
+            {
+                StartAttack(unitToAttack);
+            }
+            else
+            {
+                StartMoving(playerHQ.GetPosition());
+            }
         }
     }
 }
