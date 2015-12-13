@@ -75,7 +75,7 @@ public abstract class SpawningBuilding : BuildingBase
     }
 
     //Returns a free enemy of type given. Creates new object if there is no free enemies of the type
-    protected Unit PullFromPool(UnitType type) {
+    protected virtual Unit PullFromPool(UnitType type) {
 
         for (int i = 0; i < FreeUnits.Count; i++) {
             Unit e = FreeUnits[i];
