@@ -20,10 +20,10 @@ public class NormalEnemy : SpawningBuilding {
     {
         if (currentWave < waves.Length)
         {
-            SpawnUnits(unitTypesToUse[waves[currentWave].enemyToSpawn]);
-            currentWave++;
+            SpawnUnits(unitTypesToUse[waves[currentWave].enemyToSpawn]);            
             spawnRate = waves[currentWave].timeToWait;
             spawnCount = waves[currentWave].enemyCount;
+            currentWave++;
         }
         else {
             //Last wave was sent

@@ -60,7 +60,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         speed *= Time.fixedDeltaTime;
 
         CircleCollider2D circle = GetComponentInChildren<CircleCollider2D>();
-        circle.radius = range;
+        circle.radius = visionRange;
 
         sqrRange = range * range;
 		HandleSelection(false);
@@ -70,14 +70,25 @@ public abstract class Unit : MonoBehaviour, IDamageable
         //SearchForTarget();
         if (isMoving == true)
             Move();
+        else if (movingToTarget == true) {
+            MoveToTarget();
+        }
         else if (isAttacking == true)
             Attack();
     }
 
-    protected void SetAnimator(string parameter, bool value) {
+    protected void SetAnimator(string parameter, bool value) {        
         if (_animator != null)
-            _animator.SetBool(parameter, value);
-    }
+        {
+            try
+            {
+                _animator.SetBool(parameter, value);
+            }
+            catch (Exception e) {
+                Debug.Log("virhe: " + parameter + " value: " + value);
+            }
+        }
+    }    
 
     public void StartMoving(Vector3 point)
     {
@@ -110,11 +121,23 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public virtual void StartAttack(IDamageable target)
     {
         if (isAttacking == true) return;
-        isAttacking = true;
-        SetAnimator("isAttacking", isAttacking);
+        EndMove();
 
-        attackTimer = fireRate;
-        unitToAttack = target;
+        float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
+        if (dst > sqrRange)
+        {
+            unitToAttack = target;
+            movingToTarget = true;
+            SetAnimator("isMoving", true);
+        }
+        else
+        {
+            isAttacking = true;
+            SetAnimator("isAttacking", isAttacking);
+
+            attackTimer = fireRate;
+            unitToAttack = target;
+        }
     }
     
     public virtual void Attack()
@@ -133,6 +156,22 @@ public abstract class Unit : MonoBehaviour, IDamageable
                 isAttacking = false;
                 SetAnimator("isAttacking", isAttacking);
             }
+        }
+    }
+
+    protected virtual void MoveToTarget() {
+        float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
+        if (dst > sqrRange)
+        {
+            _transform.position = Vector3.MoveTowards(_transform.position, unitToAttack.GetPosition(), speed);
+        }
+        else {
+            movingToTarget = false;
+            isAttacking = true;
+            SetAnimator("isMoving", false);
+            SetAnimator("isAttacking", isAttacking);
+
+            attackTimer = fireRate;
         }
     }
     protected virtual void SearchForTarget()

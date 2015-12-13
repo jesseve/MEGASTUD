@@ -21,17 +21,17 @@ public abstract class EnemyUnitBase : Unit
     protected override void EndMove()
     {
         base.EndMove();
-        if (unitToAttack != null) {
-            float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
-            if (dst < sqrRange)
-            {
-                StartAttack(unitToAttack);
-            }
-            else
-            {
-                StartMoving(playerHQ.GetPosition());
-            }
-        }
+        //if (unitToAttack != null) {
+        //    float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
+        //    if (dst < sqrRange)
+        //    {
+        //        StartAttack(unitToAttack);
+        //    }
+        //    else
+        //    {
+        //        StartMoving(playerHQ.GetPosition());
+        //    }
+        //}
     }
     protected override void SearchForTarget()
     {

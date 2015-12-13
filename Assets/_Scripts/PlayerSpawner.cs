@@ -68,13 +68,13 @@ public class PlayerSpawner : SpawningBuilding {
 		Unit unit = PullFromPool(type.unitType);
         if (unit == null) return;
 		unit.Spawn();
-		Vector3 targetPos = _transform.position + Vector3.right;
-		targetPos.z = -0.1f;
-		Vector3 angle = new Vector3(0, 0, 360 / maxUnits * ActiveUnits.Count); //z = 360 / maxCount * spawnedCount
-		Vector3 dir = targetPos - _transform.position;
-		dir = Quaternion.Euler(angle) * dir;
-		targetPos = _transform.position + dir;
-		unit.transform.position = targetPos;
-	
-	}
+
+        Vector3 targetPos = _transform.position + (Vector3.right * maxRange);
+        targetPos.z = -0.1f;
+        Vector3 angle = new Vector3(0, 0, 360 / maxUnits * ActiveUnits.Count); //z = 360 / maxCount * spawnedCount
+        Vector3 dir = targetPos - _transform.position;
+        dir = Quaternion.Euler(angle) * dir;
+        targetPos = _transform.position + dir;
+        unit.transform.position = targetPos;
+    }
 }
