@@ -20,6 +20,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public bool isPlayerControlled;
     public LayerMask attackLayer;
 	public GameObject unitSelector;
+    public Color primary;
+    public Color secondary;
 
     [Range(1, 4)]
     public int size = 1;        //determine how many can be spawned by the ai
@@ -167,11 +169,17 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public void Die()
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
+        _animator.Play("Die");
         Debug.Log(gameObject.name + " DIED!");
     }
     public bool IsDead()
     {
         return health <= 0;
+    }
+    public void DieAnim()
+    {
+        gameObject.SetActive(false);
+        DeadHandler.PlayAnimation(_transform.position, primary, secondary);
     }
 
 }
