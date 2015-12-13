@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class ConstructionController : MonoBehaviour {
 
@@ -12,6 +14,7 @@ public class ConstructionController : MonoBehaviour {
 	[SerializeField] string ghostLayer = "GhostImage";
 	[SerializeField] Transform buildingParent = null;
 	[SerializeField] float constructionRange = 20f;
+	public GraphicRaycaster uiRaycaster;
 
 	private SpriteRenderer ghostBuilding;
 	private BuildingBase currentBuilding;
@@ -36,12 +39,23 @@ public class ConstructionController : MonoBehaviour {
 		{
 			if (!initialized) 
 			{
-				if (!EventSystem.current.IsPointerOverGameObject()) 
+				PointerEventData pointer = new PointerEventData(EventSystem.current);
+				pointer.position = Input.mousePosition;
+				List<RaycastResult> objects = new List<RaycastResult>();
+				uiRaycaster.Raycast(pointer, objects);
+				if (objects.Count < 1) 
 				{
 					ghostBuilding.enabled = true;
 					initialized = true;
+					return;
 				} 
-				else return;
+				else
+				{
+					foreach(RaycastResult result in objects)
+						Debug.Log(result.gameObject.name);
+					return;
+				}
+
 			}
 
 			RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity);
@@ -56,12 +70,17 @@ public class ConstructionController : MonoBehaviour {
 			bool canBeConstructed = (obstacleDetector.CanBeConstructed() && gameController.CheckResourceAvailability(currentBuilding.moneyCost, currentBuilding.energyCost) && distance <= constructionRange);
 			ghostBuilding.color = canBeConstructed?ghostColor:cantConstruct;
 
+			PointerEventData pointer2 = new PointerEventData(EventSystem.current);
+			pointer2.position = Input.mousePosition;
+			List<RaycastResult> objects2 = new List<RaycastResult>();
+			uiRaycaster.Raycast(pointer2, objects2);
+
 			if(Input.GetMouseButtonUp(0) && canBeConstructed)
 			{
 				PlaceBuilding();
 			}
 
-			if(Input.GetMouseButtonUp(1) || EventSystem.current.IsPointerOverGameObject())
+			if(Input.GetMouseButtonUp(1) || objects2.Count > 0)
 			{
 				CancelBuilding();
 			}
@@ -83,6 +102,9 @@ public class ConstructionController : MonoBehaviour {
 		currentRB = go.gameObject.AddComponent<Rigidbody2D>();
 		currentRB.gravityScale = 0f;
 		ghostBuilding = go.GetComponent<SpriteRenderer>();
+
+		go.transform.GetChild(0).gameObject.SetActive(false);
+
 		if(ghostBuilding != null)
 		{
 			ghostBuilding.color = ghostColor;
@@ -100,6 +122,9 @@ public class ConstructionController : MonoBehaviour {
 
 	private void PlaceBuilding()
 	{
+		GameObject go = currentBuilding.gameObject;
+			go.transform.GetChild(0).gameObject.SetActive(true);
+
 		gameController.UpdateResources(currentBuilding.moneyCost, currentBuilding.energyCost);
 
 		ghostBuilding.gameObject.layer = LayerMask.NameToLayer(defaultLayer);
@@ -117,6 +142,7 @@ public class ConstructionController : MonoBehaviour {
 
 	private void CancelBuilding() 
 	{
+		Debug.Log("WHY CANCEL!");
 		Destroy(currentBuilding.gameObject);
 	}
 }

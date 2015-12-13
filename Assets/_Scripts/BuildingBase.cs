@@ -42,6 +42,13 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
     public bool TakeDamage(float damage) {
         health -= damage;
+		if(_health == null)
+		{
+			_health = GetComponentInChildren<HealthBar>();
+			if(_health != null)
+				_health.Init(health);
+		}
+		
         _health.UpdateHealthBar(health);
         if (health <= 0)
         {

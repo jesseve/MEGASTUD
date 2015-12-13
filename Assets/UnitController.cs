@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UnitController : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class UnitController : MonoBehaviour {
 	public float dragThreshold = 1f;
 	public float clickLean = 1.3f;
 	public GUIStyle dragSkin;
+	public GraphicRaycaster uiRaycaster;
 
 	private List<Unit> selectedUnits;
 
@@ -41,9 +43,15 @@ public class UnitController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if(!constructionController.CheckMouseAvailability())
+
+		PointerEventData pointer = new PointerEventData(EventSystem.current);
+		pointer.position = Input.mousePosition;
+		List<RaycastResult> objects = new List<RaycastResult>();
+		uiRaycaster.Raycast(pointer, objects);
+
+		if(!constructionController.CheckMouseAvailability() || objects.Count > 0)
 		{
+			Debug.Log("RETURN");
 			return;
 		}
 
