@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum MenuState {
 	None = -1,
@@ -11,13 +12,18 @@ public enum MenuState {
 
 public class MenuController : MonoBehaviour {
 
+	public string levelName = "_DebugJukka";
+
 	private MenuState currentState = MenuState.None;
 	private Stack<MenuState> states;
 	public GameObject[] menupanels;
+	public GameObject quitPopUp;
 
 	// Use this for initialization
 	void Start () {
 		states = new Stack<MenuState> ();
+		ChangeState(MenuState.MainMenu);
+		HandleQuitPopUp(false);
 	}
 	
 	// Update is called once per frame
@@ -30,7 +36,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void ChangeState(MenuState newState) {
-		if (newState = currentState) {
+		if (newState == currentState) {
 			return;
 		}
 		states.Push (currentState);
@@ -46,8 +52,31 @@ public class MenuController : MonoBehaviour {
 	}
 
 	private void HandlePanels() {
-		switch (currentState) 
+		switch (currentState) {
+		//Add the functions you want to be called when the state is activated here
+		}
+
+		for (int i = 0; i < menupanels.Length; i++) {
+			menupanels[i].SetActive(i == (int)currentState);
+		}
 
 
+	}
+
+	public void HandleQuitPopUp(bool active) {
+		quitPopUp.SetActive(active);
+	}
+
+	public void QuitGame()
+	{
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
+		Application.QuitGame();
+#endif
+	}
+
+	public void StartGame() {
+		SceneManager.LoadScene(levelName);
 	}
 }
