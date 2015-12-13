@@ -7,6 +7,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
 {
 
     //public members
+	public float moneyCost;
+	public float energyCost;
     public int range;
     public int visionRange;
     public float damage;

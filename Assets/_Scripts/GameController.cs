@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-	[SerializeField] private float buildingCheckTime = 5f;
+	[SerializeField] private float checkTime = 5f;
 	[SerializeField] private float moneyAmount;
 	[SerializeField] private float energyAmount;
 	[SerializeField] private Text moneyText = null;
@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private BuildingBase playerHeadquarters = null;
 
 	private float checkTimer;
+	private float resourceTimer;
 	private List<BuildingBase> activeBuildings;
 	private List<BuildingBase> buildingsInQueue;
 	private bool checkingBuildings;
@@ -20,7 +21,8 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		UpdateResourceTexts();
-		checkTimer = buildingCheckTime;
+		checkTimer = checkTime;
+		resourceTimer = checkTime;
 		activeBuildings = new List<BuildingBase>();
 		buildingsInQueue = new List<BuildingBase>();
 		activeBuildings.Add(playerHeadquarters);
@@ -29,10 +31,20 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		checkTimer -= Time.deltaTime;
-		if(checkTimer <= 0f && !checkingBuildings)
+		if(checkTimer <= 0f)
 		{
-			StartCoroutine(HandleActiveBuildings());
-		}
+			if(!checkingBuildings)
+				StartCoroutine(HandleActiveBuildings());
+			else
+			{
+				resourceTimer -= Time.deltaTime;
+				if(resourceTimer <= 0f)
+				{
+					resourceTimer = checkTime;
+					GetResources();
+				}
+			}
+		} else resourceTimer = checkTime;
 	}
 
 	public void AddResources(ResourceType resource, float amount)
@@ -77,6 +89,18 @@ public class GameController : MonoBehaviour {
 		buildingsInQueue.Add(building);
 	}
 
+	private void GetResources()
+	{
+		foreach(BuildingBase building in activeBuildings)
+		{
+			if(building.buildingType == BuildingType.ResourceBuilding)
+			{
+				ResourceBuilding resourceBuilding = (ResourceBuilding)building;
+				AddResources(resourceBuilding.resourceType, resourceBuilding.amountProduced);
+			}
+		}
+	}
+
 	private IEnumerator HandleActiveBuildings()
 	{
 		checkingBuildings = true;
@@ -97,13 +121,15 @@ public class GameController : MonoBehaviour {
 					remainingBuildings.RemoveAt(i);
 					break;
 				case BuildingType.OffensiveSpawner: case BuildingType.DefensiveSpawner:
-					//TODO If enough resources spawn unit and remove from list, else just break
+					PlayerSpawner spawner = (PlayerSpawner)building;
+					if(spawner.SpawnPlayerUnit())
+						remainingBuildings.RemoveAt(i);
 					break;
 				}
 			}
 			yield return null;
 		}
-		checkTimer = buildingCheckTime;
+		checkTimer = checkTime;
 		foreach(BuildingBase building in buildingsInQueue)
 			activeBuildings.Add(building);
 

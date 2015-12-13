@@ -29,7 +29,7 @@ public abstract class SpawningBuilding : BuildingBase
         base.Update();
 		if(underConstruction)
 			return;
-		
+		Debug.Log("Update in " + name);
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnRate) {
             Spawn();

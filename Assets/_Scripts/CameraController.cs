@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
 	public float moveZoneThreshold = 2.5f;
 	public BoxCollider2D terrainCollider;
 	public Camera minimapCam;
+	public float bottomOffset = 1.25f;
 
 	private Camera mainCam;
 	private float xMinClamp;
@@ -90,7 +91,7 @@ public class CameraController : MonoBehaviour {
 			moveVector.x = 1;
 		}
 
-		if(mousePos.y >= yMin && mousePos.y <= (yMin + moveZoneThreshold + 1f))
+		if(mousePos.y >= yMin && mousePos.y <= (yMin + moveZoneThreshold + bottomOffset))
 		{
 			moveVector.y = -1;
 		}
