@@ -63,6 +63,9 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     public void StartMoving(Vector3 point)
     {
+		Vector3 currentScale = _transform.localScale;
+		currentScale.x = (point.x >= _transform.position.x)?Mathf.Abs(currentScale.x):-(Mathf.Abs(currentScale.x));
+		_transform.localScale = currentScale;
         targetPoint = point;
         isMoving = true;
         SetAnimator("isMoving", isMoving);
