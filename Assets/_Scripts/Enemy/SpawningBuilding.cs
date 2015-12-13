@@ -103,7 +103,7 @@ public abstract class SpawningBuilding : BuildingBase
             if (e.unitType == type)
             {
                 GameObject go = Instantiate(e.gameObject) as GameObject;
-                go.tag = tag;
+                //go.tag = tag;
                 go.transform.SetParent(transform);
                 return go.GetComponent<Unit>();
             }
