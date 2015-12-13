@@ -59,12 +59,15 @@ public abstract class Unit : MonoBehaviour, IDamageable
                
         speed *= Time.fixedDeltaTime;
 
+        CircleCollider2D circle = GetComponentInChildren<CircleCollider2D>();
+        circle.radius = range;
+
         sqrRange = range * range;
 		HandleSelection(false);
     }
     protected virtual void FixedUpdate()
     {
-        SearchForTarget();
+        //SearchForTarget();
         if (isMoving == true)
             Move();
         else if (isAttacking == true)
@@ -106,6 +109,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     public virtual void StartAttack(IDamageable target)
     {
+        if (isAttacking == true) return;
         isAttacking = true;
         SetAnimator("isAttacking", isAttacking);
 

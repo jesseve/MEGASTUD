@@ -14,11 +14,7 @@ public class NormalEnemy : SpawningBuilding {
     }
     protected override void Update()
     {
-        base.Update();
-        if (Input.GetMouseButtonDown(0))
-        {
-            SpawnUnits(unitTypesToUse[0]);
-        }
+        base.Update();        
     }
     public override void Spawn()
     {
@@ -26,7 +22,8 @@ public class NormalEnemy : SpawningBuilding {
         {
             SpawnUnits(unitTypesToUse[waves[currentWave].enemyToSpawn]);
             currentWave++;
-
+            spawnRate = waves[currentWave].timeToWait;
+            spawnCount = waves[currentWave].enemyCount;
         }
         else {
             //Last wave was sent
