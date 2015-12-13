@@ -16,8 +16,13 @@ public class MenuController : MonoBehaviour {
 
 	private MenuState currentState = MenuState.None;
 	private Stack<MenuState> states;
+	private AudioSource click;
 	public GameObject[] menupanels;
 	public GameObject quitPopUp;
+
+	void Awake() {
+		click = GetComponent<AudioSource> ();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -32,6 +37,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void ChangeState(int index) {
+		click.Play ();
 		ChangeState ((MenuState)index);
 	}
 
@@ -45,6 +51,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void Back() {
+		click.Play ();
 		if (states.Count > 1) {
 			currentState = states.Pop ();
 			HandlePanels ();
@@ -64,11 +71,13 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void HandleQuitPopUp(bool active) {
+		click.Play ();
 		quitPopUp.SetActive(active);
 	}
 
 	public void QuitGame()
 	{
+		click.Play ();
 #if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -77,6 +86,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void StartGame() {
+		click.Play ();
 		SceneManager.LoadScene(levelName);
 	}
 }
