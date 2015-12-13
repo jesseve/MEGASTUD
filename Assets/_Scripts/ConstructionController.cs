@@ -108,6 +108,7 @@ public class ConstructionController : MonoBehaviour {
 		ghostBuilding = null;
 
 		currentBuilding.underConstruction = false;
+		gameController.AddNewBuilding(currentBuilding);
 		currentBuilding = null;
 
 		Destroy(currentRB);

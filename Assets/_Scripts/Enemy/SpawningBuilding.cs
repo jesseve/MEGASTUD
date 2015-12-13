@@ -53,9 +53,9 @@ public abstract class SpawningBuilding : BuildingBase
     //protected methods
     protected virtual void CreateUnitPool() {
 
-        if (buildinType == BuildingType.OffensiveSpawner)
+        if (buildingType == BuildingType.OffensiveSpawner)
             type = UnitType.Attack;
-        else if (buildinType == BuildingType.DefensiveSpawner)
+        else if (buildingType == BuildingType.DefensiveSpawner)
             type = UnitType.Defence;
 
         for (int i = 0; i < unitTypesToUse.Length; i++) {

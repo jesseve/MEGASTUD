@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
-	public BuildingType buildinType = BuildingType.None;
+	public BuildingType buildingType = BuildingType.None;
     public float health;
     public float moneyCost = 0;
     public float energyCost = 0;
