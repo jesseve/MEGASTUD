@@ -14,7 +14,6 @@ public class UnitController : MonoBehaviour {
 	public float clickLean = 1.3f;
 	public GUIStyle dragSkin;
 	public GraphicRaycaster uiRaycaster;
-
 	private List<Unit> selectedUnits;
 
 	private ConstructionController constructionController;
@@ -144,11 +143,20 @@ public class UnitController : MonoBehaviour {
 			{
 				RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, rightClickLayer);
 
-				if(hit.collider != null)
+				if(hit.collider != null && selectedUnits.Count > 0)
 				{					
-					Vector3 moveTarget = new Vector3(hit.point.x, hit.point.y, -0.1f);
-					foreach(Unit unit in selectedUnits)
+//					Vector3 moveTarget = new Vector3(hit.point.x, hit.point.y, -0.1f);
+					Vector2 forward = hit.point - new Vector2(selectedUnits[0].transform.position.x, selectedUnits[0].transform.position.y);;
+					Vector2 left = new Vector2(-forward.x, forward.y);
+					for(int i = 0; i < selectedUnits.Count;i++)
+					{
+						Unit unit = selectedUnits[i];
+						int yOffset = VerticalOffset(i);
+						int xOffset = HorizontalOffset(i);
+						Vector3 moveTarget = hit.point - forward.normalized * yOffset + left.normalized * xOffset;
+						moveTarget.z = -0.1f;
 						unit.StartMoving(moveTarget);
+					}
 				}
 			}
 			else
@@ -184,4 +192,21 @@ public class UnitController : MonoBehaviour {
 
 		return dragging;
 	}
+
+	private int HorizontalOffset(int index)
+	{
+		float power = index % 5;
+		int xFactor = Mathf.CeilToInt(power/2);
+
+		int horizontalOffset = (int)Mathf.Pow (-1, power) * xFactor;
+		return horizontalOffset;
+	}
+
+	private int VerticalOffset(int index)
+	{
+		int yFactor = Mathf.FloorToInt(index / 5);
+		return yFactor;
+	}
+
+
 }
