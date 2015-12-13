@@ -99,6 +99,15 @@ public class GameController : MonoBehaviour {
 				AddResources(resourceBuilding.resourceType, resourceBuilding.amountProduced);
 			}
 		}
+
+		for(int i = buildingsInQueue.Count - 1; i >= 0; i--)
+		{
+			if(buildingsInQueue[i].buildingType == BuildingType.ResourceBuilding)
+			{
+				activeBuildings.Add(buildingsInQueue[i]);
+				buildingsInQueue.RemoveAt(i);
+			}
+		}
 	}
 
 	private IEnumerator HandleActiveBuildings()
