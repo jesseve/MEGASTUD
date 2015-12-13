@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class UnitController : MonoBehaviour {
 
-	public LayerMask clickLayer;
+	public LayerMask leftClickLayer;
+	public LayerMask rightClickLayer;
 	public LayerMask playerUnitLayer;
-	public LayerMask enemyBuildingLayer;
 	public LayerMask terrainLayer;
 	public float dragThreshold = 1f;
 	public float clickLean = 1.3f;
@@ -24,7 +24,6 @@ public class UnitController : MonoBehaviour {
 	private float boxWidth;
 	private float boxHeight;
 	private bool isDragging = false;
-	private bool finishedDragOnThisFrame = false;
 	private float timeToDrag;
 	private Vector3 currentMousePos;
 	private Vector3 mouseDownPoint;
@@ -43,6 +42,8 @@ public class UnitController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		Debug.Log("Selected: " + selectedUnits.Count);
+
 		if(!constructionController.CheckMouseAvailability())
 		{
 			Debug.Log("Unit can't be selected");
@@ -59,7 +60,7 @@ public class UnitController : MonoBehaviour {
 		{
 			timeToDrag = dragThreshold;
 
-			RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickLayer);
+			RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, leftClickLayer);
 			if(hit.collider != null)
 			{
 				mouseDownPoint = currentMousePos;
@@ -70,7 +71,7 @@ public class UnitController : MonoBehaviour {
 		{
 			if(isDragging)
 				return;
-			Debug.Log("TIME TO DRAG: " + timeToDrag);
+			
 			timeToDrag -= Time.deltaTime;
 
 			if(timeToDrag <= 0f || IsUserDragging(currentMousePos))
@@ -82,20 +83,40 @@ public class UnitController : MonoBehaviour {
 			if(isDragging)
 			{
 				isDragging = false;
-				finishedDragOnThisFrame = true;
+				Vector2 startPos = new Vector2(mouseDownPoint.x, mouseDownPoint.y);
+				Vector2 endPos = new Vector2(currentMousePos.x, currentMousePos.y);
+
+				Collider2D[] units = Physics2D.OverlapAreaAll(startPos, endPos, playerUnitLayer);
+				foreach(Collider2D col in units)
+				{
+					Unit unit = col.GetComponent<Unit>();
+					if(unit != null)
+					{
+						if(!selectedUnits.Contains(unit))
+							selectedUnits.Add(unit);
+					}
+					else
+						Debug.LogError("Why no Unit Script on an object on the player unit layer");
+				}
+				selectingUnits = false;
 			}
 
 			else
 			{
-				RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickLayer);
+				RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, leftClickLayer);
 
 				if(hit.collider != null)
 				{
-					if(hit.collider.gameObject.layer == playerUnitLayer)
+					if(hit.collider.CompareTag("PlayerOffensive"))
 					{
+						Debug.Log("SELECT");
 						if(!Input.GetMouseButton(1))
+						{
+							selectingUnits = false;
 							ClearSelection();
-						selectingUnits = true;
+						}
+						else
+							selectingUnits = true;
 						Unit unit = hit.collider.GetComponent<Unit>();
 						selectedUnits.Add(unit);
 						unit.HandleSelection(true);
@@ -106,32 +127,41 @@ public class UnitController : MonoBehaviour {
 						ClearSelection();
 					}
 				}
+				else
+					selectingUnits = false;
 			}
+
 		}
 
-		else if(Input.GetMouseButtonUp(1) && !selectingUnits)
+		else if(Input.GetMouseButtonUp(1))
 		{
-			Debug.Log("Action!!");
-			RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickLayer);
-
-			if(hit.collider != null)
+			if(!selectingUnits)
 			{
-				if(hit.collider.gameObject.layer == terrainLayer)
+				RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, rightClickLayer);
+
+				if(hit.collider != null)
 				{
-					foreach(Unit unit in selectedUnits)
-						unit.StartMoving(hit.point);
-				}
-				else if(hit.collider.gameObject.layer == enemyBuildingLayer)
-				{
-					IDamageable target = hit.collider.GetComponent<IDamageable>();
-					if(target != null)
+					Debug.Log("Action!!");
+					if(hit.collider.gameObject.CompareTag("EnemyBuilding"))
 					{
-						foreach(Unit unit in selectedUnits)
-							unit.StartAttack(target);
+						IDamageable target = hit.collider.GetComponent<IDamageable>();
+						if(target != null)
+						{
+							foreach(Unit unit in selectedUnits)
+								unit.StartAttack(target);
+						}
+						else Debug.LogError("Why no IDamageable in enemy building?!?!");
 					}
-					else Debug.LogError("Why no IDamageable in enemy building?!?!");
+					else
+					{
+						Vector3 moveTarget = new Vector3(hit.point.x, hit.point.y, -0.1f);
+						foreach(Unit unit in selectedUnits)
+							unit.StartMoving(moveTarget);
+					}
 				}
 			}
+			else
+				selectingUnits = false;
 		}
 	}
 

@@ -69,7 +69,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void Move()
     {
-        _transform.position = Vector2.MoveTowards(_transform.position, targetPoint, speed);
+        _transform.position = Vector3.MoveTowards(_transform.position, targetPoint, speed);
         if (_transform.position == targetPoint)
         {
             EndMove();
