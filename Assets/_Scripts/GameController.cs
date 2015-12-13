@@ -132,8 +132,8 @@ public class GameController : MonoBehaviour {
 					break;
 				case BuildingType.OffensiveSpawner: case BuildingType.DefensiveSpawner:
 					PlayerSpawner spawner = (PlayerSpawner)building;
-					if(spawner.SpawnPlayerUnit())
-						remainingBuildings.RemoveAt(i);
+					spawner.SpawnPlayerUnit();
+					remainingBuildings.RemoveAt(i);
 					break;
 				}
 			}

@@ -57,8 +57,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         gameObject.layer = LayerMask.NameToLayer("Default");
         _animator.Play("Die");
     }
-    public void DieAnim() {
-        Debug.Log("Died");        
+    public void DieAnim() {  
         DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject, 3);
     }
     public bool IsDead() {

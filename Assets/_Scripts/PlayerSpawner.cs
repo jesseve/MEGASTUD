@@ -54,16 +54,13 @@ public class PlayerSpawner : SpawningBuilding {
         
         return null;
     }
-    public bool SpawnPlayerUnit()
+    public void SpawnPlayerUnit()
 	{
-		Debug.Log("Energy cost: " + unitToUse.energyCost);
-		Debug.Log("Money cost: " + unitToUse.moneyCost);
-		if(!gameController.CheckResourceAvailability(unitToUse.moneyCost, unitToUse.energyCost))
-			return false;
-
+		if(IsDead())
+			return;
 		gameController.UpdateResources(unitToUse.moneyCost, unitToUse.energyCost);
 		SpawnUnits(unitToUse);
-		return true;
+		return;
 	}
 
 	public override void SpawnUnits (Unit type)

@@ -41,15 +41,12 @@ public class UnitController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-		Debug.Log("Selected: " + selectedUnits.Count);
-
+		
 		if(!constructionController.CheckMouseAvailability())
 		{
-			Debug.Log("Unit can't be selected");
 			return;
 		}
-		Debug.Log("Unit can be selected");
+
 
 		RaycastHit2D mouseHit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, terrainLayer);
 		if(mouseHit.collider != null)
@@ -166,7 +163,6 @@ public class UnitController : MonoBehaviour {
 
 	public void ClearSelection()
 	{
-		Debug.Log("CLEAR!");
 		foreach(Unit unit in selectedUnits)
 			unit.HandleSelection(false);
 
@@ -178,7 +174,6 @@ public class UnitController : MonoBehaviour {
 		bool dragging =  (mousePos.x < mouseDownPoint.x - clickLean || mousePos.x > mouseDownPoint.x + clickLean
 			|| mousePos.y < mouseDownPoint.y - clickLean || mousePos.y > mouseDownPoint.y + clickLean);
 
-		Debug.Log("DRAGGING? " + dragging);
 		return dragging;
 	}
 }

@@ -139,7 +139,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         {
             EndMove();
             IDamageable id = c.GetComponent<IDamageable>();
-            if (id == null) { Debug.Log("IDamageable null"); return; }
+            if (id == null) { return; }
 
             if (id.IsDead() == false && isAttacking == false)
             {
@@ -165,7 +165,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
             Die();
             return true;
         }
-        Debug.Log(gameObject.name + " took " + damage + " damage!");
+
         return false;
     }
     public Vector3 GetPosition()
@@ -176,7 +176,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
         _animator.Play("Die");
-        Debug.Log(gameObject.name + " DIED!");
     }
     public bool IsDead()
     {

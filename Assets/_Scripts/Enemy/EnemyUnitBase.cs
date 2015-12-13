@@ -41,7 +41,7 @@ public abstract class EnemyUnitBase : Unit
         {
             base.EndMove();
             IDamageable id = c.GetComponent<IDamageable>();
-            if (id == null) { Debug.Log("IDamageable null"); return; }
+            if (id == null) { return; }
 
             if (id.IsDead() == false && isAttacking == false)
             {
