@@ -3,10 +3,11 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(AudioSource))]
 public abstract class Unit : MonoBehaviour, IDamageable
 {
 
-    //public members
+    //public members    
 	public float moneyCost;
 	public float energyCost;
     public int range;
@@ -30,8 +31,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected bool isMoving;
 
     //Attacking    
-    protected IDamageable unitToAttack;
-    [SerializeField]
+    protected IDamageable unitToAttack;    
     protected bool isAttacking;
     protected float attackTimer;
     protected bool movingToTarget;
@@ -40,12 +40,16 @@ public abstract class Unit : MonoBehaviour, IDamageable
     //Components
     protected Transform _transform;
     protected Animator _animator;
+    protected SpriteRenderer _sprite;
+    public AudioSource _audio;
+    public AudioClip[] unitSounds;
 
     // Use this for initialization
     protected virtual void Awake()
     {
         _transform = transform;
         _animator = GetComponent<Animator>();
+        _sprite = GetComponent<SpriteRenderer>();
         speed *= Time.fixedDeltaTime;
 
         sqrRange = range * range;
@@ -67,9 +71,10 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     public void StartMoving(Vector3 point)
     {
-		Vector3 currentScale = _transform.localScale;
-		currentScale.x = (point.x >= _transform.position.x)?Mathf.Abs(currentScale.x):-(Mathf.Abs(currentScale.x));
-		_transform.localScale = currentScale;
+        //Vector3 currentScale = _transform.localScale;
+        //currentScale.x = (point.x >= _transform.position.x)?Mathf.Abs(currentScale.x):-(Mathf.Abs(currentScale.x));
+        //_transform.localScale = currentScale;
+        _sprite.flipX = (point.x < _transform.position.x);
         targetPoint = point;
         isMoving = true;
         SetAnimator("isMoving", isMoving);
