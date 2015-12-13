@@ -92,6 +92,7 @@ public class UnitController : MonoBehaviour {
 					Unit unit = col.GetComponent<Unit>();
 					if(unit != null)
 					{
+						unit.HandleSelection(true);
 						if(!selectedUnits.Contains(unit))
 							selectedUnits.Add(unit);
 					}
