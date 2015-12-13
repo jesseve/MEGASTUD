@@ -58,18 +58,7 @@ public class ConstructionController : MonoBehaviour {
 
 			if(Input.GetMouseButtonUp(0) && canBeConstructed)
 			{
-				gameController.UpdateResources(currentBuilding.moneyCost, currentBuilding.energyCost);
-
-				ghostBuilding.gameObject.layer = LayerMask.NameToLayer(defaultLayer);
-				ghostBuilding.GetComponent<SpriteRenderer>().color = Color.white;
-				ghostBuilding.transform.SetParent(buildingParent);
-				ghostBuilding = null;
-
-				currentBuilding.underConstruction = false;
-				currentBuilding = null;
-
-				Destroy(currentRB);
-				Destroy(obstacleDetector);
+				PlaceBuilding();
 			}
 
 			if(Input.GetMouseButtonUp(1) || EventSystem.current.IsPointerOverGameObject())
@@ -81,9 +70,10 @@ public class ConstructionController : MonoBehaviour {
 
 	public void ConstructNewBuilding(int type)
 	{
-		if(currentBuilding != null || !unitController.CheckMouseAvailability())
+		if(currentBuilding != null)
 			return;
-		
+
+		unitController.ClearSelection();
 		currentBuilding = Instantiate(buildingPrefabs[type]) as BuildingBase;
 		currentBuilding.underConstruction = true;
 
@@ -108,8 +98,25 @@ public class ConstructionController : MonoBehaviour {
 		return currentBuilding == null;
 	}
 
+	private void PlaceBuilding()
+	{
+		gameController.UpdateResources(currentBuilding.moneyCost, currentBuilding.energyCost);
+
+		ghostBuilding.gameObject.layer = LayerMask.NameToLayer(defaultLayer);
+		ghostBuilding.GetComponent<SpriteRenderer>().color = Color.white;
+		ghostBuilding.transform.SetParent(buildingParent);
+		ghostBuilding = null;
+
+		currentBuilding.underConstruction = false;
+		currentBuilding = null;
+
+		Destroy(currentRB);
+		Destroy(obstacleDetector);
+	}
+
 	private void CancelBuilding() 
 	{
 		Destroy(currentBuilding.gameObject);
 	}
 }
+

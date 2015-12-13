@@ -178,12 +178,7 @@ public class UnitController : MonoBehaviour {
 		}
 	}
 
-	public bool CheckMouseAvailability()
-	{
-		return selectedUnits.Count < 1;
-	}
-
-	private void ClearSelection()
+	public void ClearSelection()
 	{
 		Debug.Log("CLEAR!");
 		foreach(Unit unit in selectedUnits)

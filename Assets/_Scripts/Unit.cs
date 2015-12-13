@@ -16,6 +16,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public UnitType unitType;
     public bool isPlayerControlled;
     public LayerMask attackLayer;
+	public GameObject unitSelector;
 
     [Range(1, 4)]
     public int size = 1;        //determine how many can be spawned by the ai
@@ -46,6 +47,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         speed *= Time.fixedDeltaTime;
 
         sqrRange = range * range;
+		HandleSelection(false);
     }
     protected virtual void FixedUpdate()
     {
@@ -83,7 +85,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
         isMoving = false;
         SetAnimator("isMoving", isMoving);
     }
-    public void HandleSelection(bool selected) { }
+    public void HandleSelection(bool selected) { 
+		if(unitSelector != null)
+			unitSelector.SetActive	(selected);
+	}
+
     public virtual void StartAttack(IDamageable target)
     {
         isAttacking = true;
