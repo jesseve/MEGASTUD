@@ -37,6 +37,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected bool isAttacking;
     protected float attackTimer;
     protected bool movingToTarget;
+    protected Vector3 attackPosition;
     protected int sqrRange;
 
     //Components
@@ -120,24 +121,32 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     public virtual void StartAttack(IDamageable target)
     {
-        if (isAttacking == true) return;
+        if (isAttacking == true || movingToTarget == true) return;
         EndMove();
 
-        float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
-        if (dst > sqrRange)
+        if (target.Target())
         {
             unitToAttack = target;
-            movingToTarget = true;
-            SetAnimator("isMoving", true);
+            attackPosition = target.GetAttackPosition(_transform.position);
+            float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
+            if (dst > sqrRange)
+            {
+                movingToTarget = true;
+                SetAnimator("isMoving", true);
+            }
+            else
+            {
+                isAttacking = true;
+                SetAnimator("isAttacking", isAttacking);
+
+                attackTimer = fireRate;
+
+            }
         }
         else
         {
-            isAttacking = true;
-            SetAnimator("isAttacking", isAttacking);
 
-            attackTimer = fireRate;
-            unitToAttack = target;
-        }
+        }        
     }
     
     public virtual void Attack()
@@ -160,12 +169,10 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
 
     protected virtual void MoveToTarget() {
-        float dst = (unitToAttack.GetPosition() - _transform.position).sqrMagnitude;
-        if (dst > sqrRange)
-        {
-            _transform.position = Vector3.MoveTowards(_transform.position, unitToAttack.GetPosition(), speed);
-        }
-        else {
+        
+        _transform.position = Vector3.MoveTowards(_transform.position, attackPosition, speed);
+
+        if (attackPosition == _transform.position) {
             movingToTarget = false;
             isAttacking = true;
             SetAnimator("isMoving", false);
@@ -229,5 +236,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
         DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject);
     }
-
+    public bool Target()
+    {
+        return true;
+    }
+    public Vector3 GetAttackPosition(Vector3 pos) {
+        return transform.position;
+    }
 }

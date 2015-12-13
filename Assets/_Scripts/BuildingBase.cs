@@ -8,9 +8,12 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public float moneyCost = 0;
     public float energyCost = 0;
 	public bool underConstruction = false;
+    public int maxAttackers;
+    public int attackRange;
     public Color primary;
     public Color secondary;
 
+    protected int currentAttackers;
     protected int currentLevel;
     protected Animator _animator;
     protected HealthBar _health;
@@ -36,6 +39,18 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
     public virtual void Upgrade() {
         currentLevel++;
+    }
+
+    public Vector3 GetAttackPosition(Vector3 pos) {
+
+        Vector3 targetPos = _transform.position + (Vector3.right * attackRange);
+        targetPos.z = -0.1f;
+        Vector3 angle = new Vector3(0, 0, 360 / maxAttackers * currentAttackers); //z = 360 / maxCount * spawnedCount
+        Vector3 dir = targetPos - _transform.position;
+        dir = Quaternion.Euler(angle) * dir;
+        targetPos = _transform.position + dir;
+        
+        return targetPos;
     }
 
     //IDamageable implementation
@@ -72,5 +87,17 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     }
     public Vector3 GetPosition() {
         return _transform.position;
+    }
+    public bool Target() {
+
+        if (currentAttackers < maxAttackers) {
+
+            currentAttackers++;
+
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

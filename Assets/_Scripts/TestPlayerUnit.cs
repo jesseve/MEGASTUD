@@ -8,4 +8,9 @@ public class TestPlayerUnit : Unit
     {
         //throw new NotImplementedException();
     }
+
+    public override void StartAttack(IDamageable target)
+    {
+        
+    }
 }
