@@ -27,6 +27,9 @@ public abstract class SpawningBuilding : BuildingBase
     protected override void Update()
     {
         base.Update();
+		if(underConstruction)
+			return;
+		
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnRate) {
             Spawn();
