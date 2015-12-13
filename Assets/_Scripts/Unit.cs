@@ -43,6 +43,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected Transform _transform;
     protected Animator _animator;
     protected SpriteRenderer _sprite;
+    protected HealthBar _health;
     public AudioSource _audio;
     public AudioClip[] unitSounds;
 
@@ -52,6 +53,10 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _transform = transform;
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
+        _health = GetComponentInChildren<HealthBar>();
+        if(_health != null)
+            _health.Init(health);
+               
         speed *= Time.fixedDeltaTime;
 
         sqrRange = range * range;
@@ -154,6 +159,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public virtual bool TakeDamage(float damage)
     {
         health -= damage;
+        _health.UpdateHealthBar(health);
         if (health <= 0)
         {
             Die();
@@ -179,7 +185,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public void DieAnim()
     {
         gameObject.SetActive(false);
-        DeadHandler.PlayAnimation(_transform.position, primary, secondary);
+        DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject);
     }
 
 }

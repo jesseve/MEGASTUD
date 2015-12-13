@@ -12,8 +12,11 @@ public abstract class EnemyUnitBase : Unit
             
     public override void Spawn()
     {
-        playerHQ = GameObject.FindGameObjectWithTag("PlayerHQ").GetComponent<BuildingBase>();
-        StartMoving(playerHQ.GetPosition());
+        GameObject hq = GameObject.FindGameObjectWithTag("PlayerHQ");
+        if(hq != null)
+            playerHQ = hq.GetComponent<BuildingBase>();
+        if(playerHQ != null)
+            StartMoving(playerHQ.GetPosition());
     }
     protected override void EndMove()
     {
@@ -49,6 +52,7 @@ public abstract class EnemyUnitBase : Unit
                 return;
             }
         }
-        StartMoving(playerHQ.GetPosition());
+        if(playerHQ != null)
+            StartMoving(playerHQ.GetPosition());
     }
 }

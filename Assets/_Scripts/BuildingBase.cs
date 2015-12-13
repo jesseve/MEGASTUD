@@ -13,6 +13,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
     protected int currentLevel;
     protected Animator _animator;
+    protected HealthBar _health;
 
     protected Transform _transform;
 	
@@ -21,6 +22,10 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	protected virtual void Start () {
         _transform = transform;
         _animator = GetComponent<Animator>();
+        _health = GetComponentInChildren<HealthBar>();
+        if(_health != null)
+            _health.Init(health);
+
         currentLevel = 0;
 	}
 	
@@ -37,6 +42,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
     public bool TakeDamage(float damage) {
         health -= damage;
+        _health.UpdateHealthBar(health);
         if (health <= 0)
         {
             Die();
@@ -52,9 +58,8 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         _animator.Play("Die");
     }
     public void DieAnim() {
-        Debug.Log("Died");
-        gameObject.SetActive(false);
-        DeadHandler.PlayAnimation(_transform.position, primary, secondary);
+        Debug.Log("Died");        
+        DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject, 3);
     }
     public bool IsDead() {
         return health <= 0;
