@@ -10,6 +10,7 @@ public abstract class SpawningBuilding : BuildingBase
     public Unit[] unitTypesToUse;    
     public float spawnRate;
     public int spawnCount;
+	public float spawnRange;
 
     //protected members
     [SerializeField]protected List<Unit> FreeUnits;
@@ -29,7 +30,6 @@ public abstract class SpawningBuilding : BuildingBase
         base.Update();
 		if(underConstruction)
 			return;
-		Debug.Log("Update in " + name);
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnRate) {
             Spawn();

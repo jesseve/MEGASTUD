@@ -24,4 +24,18 @@ public class PlayerSpawner : SpawningBuilding {
 		SpawnUnits(unitToUse);
 		return true;
 	}
+
+	public override void SpawnUnits (Unit type)
+	{
+		Unit unit = PullFromPool(type);
+		unit.Spawn();
+		Vector3 targetPos = _transform.position + Vector2.right;
+		targetPos.z = -0.1f;
+		Vector3 angle = new Vector3(0, 0, 360 / 1 * 1); //z = 360 / maxCount * spawnedCount
+		Vector3 dir = targetPos - _transform.position;
+		dir = Quaternion.Euler(angle) * dir;
+		targetPos = _transform.position + dir;
+		unit.transform.position = targetPos;
+	
+	}
 }

@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour {
 	private bool checkingBuildings;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		UpdateResourceTexts();
 		checkTimer = checkTime;
 		resourceTimer = checkTime;
@@ -122,6 +122,7 @@ public class GameController : MonoBehaviour {
 			for(int i = remainingBuildings.Count - 1; i >= 0;i--)
 			{
 				BuildingBase building = remainingBuildings[i];
+
 				switch(building.buildingType)
 				{
 				case BuildingType.ResourceBuilding:

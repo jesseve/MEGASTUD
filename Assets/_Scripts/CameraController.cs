@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
 	public BoxCollider2D terrainCollider;
 	public Camera minimapCam;
 	public float bottomOffset = 1.25f;
+	public GraphicRaycaster uiRaycaster;
 
 	private Camera mainCam;
 	private float xMinClamp;
@@ -20,7 +21,6 @@ public class CameraController : MonoBehaviour {
 
 	private float camVertical;
 	private float camHorizontal;
-	private GraphicRaycaster uiRaycaster;
 
 	void Start () {
 		mainCam = Camera.main;
@@ -30,9 +30,6 @@ public class CameraController : MonoBehaviour {
 		xMaxClamp = terrainCollider.transform.position.x + terrainCollider.bounds.extents.x - camHorizontal;
 		yMinClamp = terrainCollider.transform.position.y - terrainCollider.bounds.extents.y + camVertical;
 		yMaxClamp = terrainCollider.transform.position.y + terrainCollider.bounds.extents.y - camVertical;
-
-		uiRaycaster = (GraphicRaycaster)FindObjectOfType(typeof(GraphicRaycaster));
-
 	}
 
 	void Update () {

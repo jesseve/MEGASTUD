@@ -110,7 +110,6 @@ public class UnitController : MonoBehaviour {
 				{
 					if(hit.collider.CompareTag("PlayerOffensive"))
 					{
-						Debug.Log("SELECT");
 						if(!Input.GetMouseButton(1))
 						{
 							selectingUnits = false;
@@ -141,24 +140,10 @@ public class UnitController : MonoBehaviour {
 				RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, rightClickLayer);
 
 				if(hit.collider != null)
-				{
-					Debug.Log("Action!!");
-					if(hit.collider.gameObject.CompareTag("EnemyBuilding"))
-					{
-						IDamageable target = hit.collider.GetComponent<IDamageable>();
-						if(target != null)
-						{
-							foreach(Unit unit in selectedUnits)
-								unit.StartAttack(target);
-						}
-						else Debug.LogError("Why no IDamageable in enemy building?!?!");
-					}
-					else
-					{
-						Vector3 moveTarget = new Vector3(hit.point.x, hit.point.y, -0.1f);
-						foreach(Unit unit in selectedUnits)
-							unit.StartMoving(moveTarget);
-					}
+				{					
+					Vector3 moveTarget = new Vector3(hit.point.x, hit.point.y, -0.1f);
+					foreach(Unit unit in selectedUnits)
+						unit.StartMoving(moveTarget);
 				}
 			}
 			else
