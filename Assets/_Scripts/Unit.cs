@@ -8,6 +8,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
 {
 
     //public members
+	public GameObject minimapIcon;
 	public SoundClip attackSound = SoundClip.Attack;
 	public float moneyCost;
 	public float energyCost;
@@ -51,10 +52,17 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
 	private LayerMask defaultLayer = -1;
 
-	void OnEnable()
+
+	protected virtual void OnEnable()
 	{
+		minimapIcon.SetActive(true);
 		if(defaultLayer != -1)
 			gameObject.layer = defaultLayer;
+	}
+
+	protected virtual void OnDisable()
+	{
+		minimapIcon.SetActive(false);
 	}
     // Use this for initialization
     protected virtual void Awake()
