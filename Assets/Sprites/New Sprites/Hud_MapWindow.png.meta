@@ -1,9 +1,10 @@
 fileFormatVersion: 2
 guid: e6b91019c2ad998448a228306363603a
-timeCreated: 1450048785
+timeCreated: 1450107972
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Hud_MapWindow_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +39,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +50,97 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: Hud_MapWindow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 512
+        height: 451
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 252, y: 225.5}
+        - {x: 245, y: 219.5}
+        - {x: 241, y: 211.5}
+        - {x: 240, y: 213.5}
+        - {x: 225, y: 212.5}
+        - {x: 215, y: 206.5}
+        - {x: 212, y: 201.5}
+        - {x: 212, y: 198.5}
+        - {x: 205, y: 198.5}
+        - {x: 200, y: 194.5}
+        - {x: 198, y: 192.5}
+        - {x: 193, y: 183.5}
+        - {x: 194, y: 178.5}
+        - {x: 185, y: 178.5}
+        - {x: 179, y: 176.5}
+        - {x: 170, y: 175.5}
+        - {x: 163, y: 170.5}
+        - {x: 147, y: 154.5}
+        - {x: 143, y: 148.5}
+        - {x: 141, y: 144.5}
+        - {x: 135, y: 144.5}
+        - {x: 123, y: 142.5}
+        - {x: 109, y: 136.5}
+        - {x: 101, y: 137.5}
+        - {x: 88, y: 137.5}
+        - {x: 83, y: 133.5}
+        - {x: 68, y: 133.5}
+        - {x: 63, y: 131.5}
+        - {x: 58, y: 127.5}
+        - {x: 49, y: 128.5}
+        - {x: 40, y: 128.5}
+        - {x: 35, y: 124.5}
+        - {x: 12, y: 124.5}
+        - {x: 11, y: 125.5}
+        - {x: 0, y: 127.5}
+        - {x: -18, y: 133.5}
+        - {x: -37, y: 138.5}
+        - {x: -39, y: 135.5}
+        - {x: -36, y: 132.5}
+        - {x: -30, y: 128.5}
+        - {x: -26, y: 122.5}
+        - {x: -43, y: 129.5}
+        - {x: -47, y: 130.5}
+        - {x: -57, y: 132.5}
+        - {x: -68, y: 132.5}
+        - {x: -78, y: 130.5}
+        - {x: -85, y: 129.5}
+        - {x: -98, y: 125.5}
+        - {x: -107, y: 124.5}
+        - {x: -109, y: 126.5}
+        - {x: -113, y: 128.5}
+        - {x: -119, y: 129.5}
+        - {x: -140, y: 129.5}
+        - {x: -147, y: 128.5}
+        - {x: -158, y: 127.5}
+        - {x: -167, y: 125.5}
+        - {x: -168, y: 128.5}
+        - {x: -174, y: 129.5}
+        - {x: -178, y: 132.5}
+        - {x: -190, y: 132.5}
+        - {x: -193, y: 131.5}
+        - {x: -198, y: 128.5}
+        - {x: -211, y: 138.5}
+        - {x: -220, y: 142.5}
+        - {x: -227, y: 144.5}
+        - {x: -237, y: 144.5}
+        - {x: -242, y: 142.5}
+        - {x: -246, y: 137.5}
+        - {x: -250, y: 127.5}
+        - {x: -254, y: 121.5}
+        - {x: -255, y: 117.5}
+        - {x: -256, y: 116.5}
+        - {x: -256, y: -225.5}
+        - {x: 256, y: -225.5}
+        - {x: 256, y: 225.5}
+      - - {x: -253, y: 121.5}
+        - {x: -253, y: 124.5}
+        - {x: -256, y: 125.5}
+        - {x: -256, y: 120.5}
     outline: []
   spritePackingTag: 
   userData: 
