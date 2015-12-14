@@ -190,23 +190,26 @@ public class GameController : MonoBehaviour {
 	}
 
     public void HQDown(BuildingBase b) {
+        if (gameEnded == true) return;
         if (b.CompareTag("PlayerHQ"))
             LoseGame();
         else if (b is NormalEnemy) {
             enemies.Remove(b as NormalEnemy);
             if (enemies.Count <= 0) {
-                WinGame();
+                WinGame();                
             }
         }
     }
 
     private void WinGame() {
         StopObjects();
+        gameEnded = true;
         gameEnd.EndGame(true);
         Debug.Log("HIHHIHHII");                
     }
     private void LoseGame() {
         StopObjects();
+        gameEnded = true;
         gameEnd.EndGame(false);
         Debug.Log("Hävisit pelin");
     }

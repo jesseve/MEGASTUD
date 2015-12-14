@@ -100,6 +100,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     //IDamageable implementation
 
     public bool TakeDamage(float damage) {
+        if (IsDead() == true) return true;
 		currentHealth -= damage;
 		if(_health == null)
 		{
