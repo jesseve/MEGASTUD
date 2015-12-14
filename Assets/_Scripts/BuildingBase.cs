@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
 	public BuildingType buildingType = BuildingType.None;
+	public GameObject minimapIcon;
 	public bool dealDamage = false;
 	public LayerMask targetLayer;
 	public float aoeInterval = 2f;
@@ -48,7 +49,16 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 			demolishedBuilding.SetActive(false);
 		_aoeTimer = aoeInterval;
 	}
-	
+
+	protected virtual void OnEnable()
+	{
+		minimapIcon.SetActive(true);
+	}
+
+	protected virtual void OnDisable()
+	{
+		minimapIcon.SetActive(false);
+	}
     
     // Use this for initialization
 	protected virtual void Start () {

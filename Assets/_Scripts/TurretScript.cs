@@ -11,8 +11,9 @@ public class TurretScript : BuildingBase {
 	protected override void Update ()
 	{}
 
-	void OnEnable()
+	protected override void OnEnable ()
 	{
+		base.OnEnable ();
 		targetUnit = null;
 		if(spriteRend == null)
 			spriteRend = GetComponent<SpriteRenderer>();

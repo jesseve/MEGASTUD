@@ -7,7 +7,6 @@ public class DefensiveUnit : Unit {
 
 	private Vector3 initPos;
 	private float sqrMaxRange;
-	private bool initialized = false;
 
 	protected override void Awake ()
 	{
@@ -21,7 +20,6 @@ public class DefensiveUnit : Unit {
 		isMoving = false;
 		movingToTarget = false;
 		unitToAttack = null;
-		initialized = false;
 		SearchForTarget();
 	}
 
@@ -69,7 +67,6 @@ public class DefensiveUnit : Unit {
 
 	public void SetInitPos(Vector3 pos)
 	{
-		initialized = true;
 		initPos = pos;
 	}
 }

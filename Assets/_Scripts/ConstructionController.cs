@@ -19,6 +19,7 @@ public class ConstructionController : MonoBehaviour {
 	private SpriteRenderer ghostBuilding;
 	private BuildingBase currentBuilding;
 	private Rigidbody2D currentRB;
+	private Animator currentAnim;
 	private CheckSlotAvailability obstacleDetector;
 
 	private Camera mainCam;
@@ -102,6 +103,8 @@ public class ConstructionController : MonoBehaviour {
 		currentRB = go.gameObject.AddComponent<Rigidbody2D>();
 		currentRB.gravityScale = 0f;
 		currentRB.isKinematic = true;
+		currentAnim = go.gameObject.GetComponent<Animator>();
+		currentAnim.enabled = false;
 		ghostBuilding = go.GetComponent<SpriteRenderer>();
 
 		go.transform.GetChild(0).gameObject.SetActive(false);
@@ -136,6 +139,8 @@ public class ConstructionController : MonoBehaviour {
 		currentBuilding.underConstruction = false;
 		gameController.AddNewBuilding(currentBuilding);
 		currentBuilding = null;
+		currentAnim.enabled = true;
+		currentAnim = null;
 
 		Destroy(currentRB);
 		Destroy(obstacleDetector);
