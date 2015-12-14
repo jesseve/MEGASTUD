@@ -115,7 +115,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         isMoving = true;
         SetAnimator("isMoving", isMoving);
     }
-    public void Move()
+    public virtual void Move()
     {
         _transform.position = Vector3.MoveTowards(_transform.position, targetPoint, speed);
         if (_transform.position == targetPoint)
