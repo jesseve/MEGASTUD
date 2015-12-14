@@ -68,14 +68,17 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     protected virtual void FixedUpdate()
     {
-        //SearchForTarget();
         if (isMoving == true)
+		{
             Move();
+			SearchForTarget();
+		}
         else if (movingToTarget == true) {
             MoveToTarget();
         }
         else if (isAttacking == true)
             Attack();
+		else SearchForTarget();
     }
 
     protected void SetAnimator(string parameter, bool value) {        
@@ -136,6 +139,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
             }
             else
             {
+				Debug.Log("Echo base we're commencing our attack run!");
                 isAttacking = true;
                 SetAnimator("isAttacking", isAttacking);
 
@@ -145,7 +149,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         }
         else
         {
-
+			MoveToHQ();
         }        
     }
     
@@ -164,6 +168,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
                 unitToAttack = null;
                 isAttacking = false;
                 SetAnimator("isAttacking", isAttacking);
+				MoveToHQ();
             }
         }
     }
@@ -183,7 +188,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     protected virtual void SearchForTarget()
     {
-        if (unitToAttack != null) return;
+		if (unitToAttack != null) return;
+		Debug.Log("Searching for targets");
         Collider2D c = Physics2D.OverlapCircle(_transform.position, visionRange, attackLayer);
         if (c != null)
         {
@@ -243,4 +249,5 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public Vector3 GetAttackPosition(Vector3 pos) {
         return transform.position;
     }
+	protected abstract void MoveToHQ();
 }

@@ -56,6 +56,7 @@ public class DeadHandler : MonoBehaviour {
     public static void PlayAnimation(Vector3 location, Color primary, Color secondary, GameObject dead, float size = 1) {
         dh.GetObj().PlayAnimation(location, primary, secondary, dead, size);
     }
+
     public static void EndAnimation(DeadObject obj) {
         dh.ReturnObj(obj);
     }

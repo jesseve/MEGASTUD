@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
@@ -12,6 +13,8 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public int attackRange;
     public Color primary;
     public Color secondary;
+	public float respawnTime = 0f;
+	public GameObject demolishedBuilding;
 
     protected int currentAttackers;
     protected int currentLevel;
@@ -19,6 +22,25 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     protected HealthBar _health;
 
     protected Transform _transform;
+	protected GameController gameController;
+
+	private float respawnTimer;
+	private float currentHealth;
+	private SpriteRenderer buildingVisual;
+	private Sprite defaultSprite;
+	private LayerMask defaultLayer;
+	private bool respawning = false;
+
+	void Awake()
+	{
+		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		currentHealth = health;
+		buildingVisual = GetComponent<SpriteRenderer>();
+		defaultSprite = buildingVisual.sprite;
+		defaultLayer = gameObject.layer;
+		if(demolishedBuilding != null)
+			demolishedBuilding.SetActive(false);
+	}
 	
     
     // Use this for initialization
@@ -26,8 +48,9 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         _transform = transform;
         _animator = GetComponent<Animator>();
         _health = GetComponentInChildren<HealthBar>();
+
         if(_health != null)
-            _health.Init(health);
+			_health.Init(currentHealth);
 
         currentLevel = 0;
 	}
@@ -56,16 +79,16 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     //IDamageable implementation
 
     public bool TakeDamage(float damage) {
-        health -= damage;
+		currentHealth -= damage;
 		if(_health == null)
 		{
 			_health = GetComponentInChildren<HealthBar>();
 			if(_health != null)
-				_health.Init(health);
+				_health.Init(currentHealth);
 		}
 		
-        _health.UpdateHealthBar(health);
-        if (health <= 0)
+		_health.UpdateHealthBar(currentHealth);
+		if (currentHealth <= 0)
         {
             Die();
             return true;
@@ -76,14 +99,17 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         }
     }
     public void Die() {
+		Debug.Log("DIE DIE DIE MY DARLING!");
         gameObject.layer = LayerMask.NameToLayer("Default");
         _animator.Play("Die");
     }
     public void DieAnim() {  
         DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject, 3);
+		//TODO
     }
+
     public bool IsDead() {
-        return health <= 0;
+		return currentHealth <= 0;
     }
     public Vector3 GetPosition() {
         return _transform.position;
@@ -100,4 +126,57 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
             return false;
         }
     }
+
+	public virtual void RespawnMe()
+	{
+		if(respawnTime <= 0 || respawning)
+			return;
+
+		respawning = true;
+		buildingVisual.enabled = false;
+		if(demolishedBuilding != null)
+		{
+			demolishedBuilding.SetActive(true);
+			demolishedBuilding.transform.gameObject.SetActive(true);
+		}
+
+		Collider2D col = GetComponent<Collider2D>();
+		if(col != null)
+			col.enabled = false;
+		gameController.DeactivateBuilding(this);
+		respawnTimer = respawnTime;
+		_health.gameObject.SetActive(false);
+		GameController.RespawnEvent += Respawn;
+	}
+
+	public virtual void Respawn()
+	{
+		respawnTimer -= Time.deltaTime;
+//		if(demolishedBuilding != null)
+//		{
+//			if(!demolishedBuilding.transform.parent.gameObject.activeInHierarchy)
+//				demolishedBuilding.transform.parent.gameObject.SetActive(true);
+//		}
+
+		if(respawnTimer <= 0)
+		{
+			GameController.RespawnEvent -= Respawn;
+			gameController.ReactivateBuilding(this);
+			_health.gameObject.SetActive(true);
+			currentHealth = health; 
+			_health.UpdateHealthBar(currentHealth);
+			buildingVisual.sprite = defaultSprite;
+			buildingVisual.color = Color.white;
+			if(demolishedBuilding != null)
+				demolishedBuilding.SetActive(false);
+			buildingVisual.enabled = true;
+			gameObject.layer = defaultLayer;
+			currentAttackers = 0;
+			Collider2D col = GetComponent<Collider2D>();
+			if(col != null)
+				col.enabled = true;
+			respawning = false;
+		}
+	}
+
 }

@@ -52,7 +52,12 @@ public abstract class EnemyUnitBase : Unit
                 return;
             }
         }
-        if(playerHQ != null)
-            StartMoving(playerHQ.GetPosition());
+		MoveToHQ();
     }
+
+	protected override void MoveToHQ ()
+	{
+		if(playerHQ != null)
+			StartMoving(playerHQ.GetPosition());
+	}
 }

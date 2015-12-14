@@ -2,8 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour {
+
+	public delegate void Respawn();
+	public static event Respawn RespawnEvent;
 
 	[SerializeField] private float checkTime = 5f;
 	[SerializeField] private float moneyAmount;
@@ -11,6 +15,7 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private Text moneyText = null;
 	[SerializeField] private Text energyText = null;
 	[SerializeField] private BuildingBase playerHeadquarters = null;
+	[SerializeField] private Image resourceBar = null;
 
 	private float checkTimer;
 	private float resourceTimer;
@@ -30,6 +35,10 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(RespawnEvent != null)
+			RespawnEvent();
+		
 		checkTimer -= Time.deltaTime;
 		if(checkTimer <= 0f)
 		{
@@ -45,6 +54,8 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		} else resourceTimer = checkTime;
+
+		resourceBar.fillAmount = checkTimer / checkTime;
 	}
 
 	public void AddResources(ResourceType resource, float amount)
@@ -80,13 +91,28 @@ public class GameController : MonoBehaviour {
 
 	private void UpdateResourceTexts()
 	{
-		moneyText.text = "Money: " + moneyAmount;
-		energyText.text = "Energy: " +energyAmount;
+		moneyText.text = moneyAmount.ToString();
+		energyText.text = energyAmount.ToString();
 	}
 
 	public void AddNewBuilding(BuildingBase building)
 	{
 		buildingsInQueue.Add(building);
+	}
+
+	public void DeactivateBuilding(BuildingBase building)
+	{
+		if(activeBuildings.Contains(building))
+			activeBuildings.Remove(building);
+	}
+
+	public void ReactivateBuilding(BuildingBase building)
+	{
+		if(buildingsInQueue.Contains(building))
+			return;
+		
+		buildingsInQueue.Add(building);
+		building.gameObject.SetActive(true);
 	}
 
 	private void GetResources()

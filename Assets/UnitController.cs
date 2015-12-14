@@ -93,6 +93,9 @@ public class UnitController : MonoBehaviour {
 				Collider2D[] units = Physics2D.OverlapAreaAll(startPos, endPos, playerUnitLayer);
 				foreach(Collider2D col in units)
 				{
+					if(!col.CompareTag("PlayerOffensive"))
+						return;
+					
 					Unit unit = col.GetComponent<Unit>();
 					if(unit != null)
 					{

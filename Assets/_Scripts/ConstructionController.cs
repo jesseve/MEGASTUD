@@ -101,6 +101,7 @@ public class ConstructionController : MonoBehaviour {
 		obstacleDetector = go.gameObject.AddComponent<CheckSlotAvailability>();
 		currentRB = go.gameObject.AddComponent<Rigidbody2D>();
 		currentRB.gravityScale = 0f;
+		currentRB.isKinematic = true;
 		ghostBuilding = go.GetComponent<SpriteRenderer>();
 
 		go.transform.GetChild(0).gameObject.SetActive(false);

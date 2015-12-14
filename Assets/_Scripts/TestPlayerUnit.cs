@@ -7,10 +7,19 @@ public class TestPlayerUnit : Unit
     public override void Spawn()
     {
         //throw new NotImplementedException();
+		isAttacking = false;
+		isMoving = false;
+		movingToTarget = false;
+		unitToAttack = null;
+		SearchForTarget();
     }
 
-    public override void StartAttack(IDamageable target)
-    {
-        
-    }
+//    public override void StartAttack(IDamageable target)
+//    {
+//        
+//    }
+
+	protected override void MoveToHQ ()
+	{
+	}
 }

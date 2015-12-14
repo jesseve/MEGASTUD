@@ -5,12 +5,6 @@ public class PlayerSpawner : SpawningBuilding {
 
     public int maxUnits = 6;
     public float maxRange = 2;
-	private GameController gameController;
-
-	void Awake()
-	{
-		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-	}
 
 	protected override void Update ()
 	{}
@@ -68,7 +62,7 @@ public class PlayerSpawner : SpawningBuilding {
 		Unit unit = PullFromPool(type.unitType);
         if (unit == null) return;
 		unit.Spawn();
-
+		unit.gameObject.layer = LayerMask.NameToLayer("PlayerUnit");
         Vector3 targetPos = _transform.position + (Vector3.right * maxRange);
         targetPos.z = -0.1f;
         Vector3 angle = new Vector3(0, 0, 360 / maxUnits * ActiveUnits.Count); //z = 360 / maxCount * spawnedCount
@@ -77,4 +71,21 @@ public class PlayerSpawner : SpawningBuilding {
         targetPos = _transform.position + dir;
         unit.transform.position = targetPos;
     }
+
+	public override void RespawnMe ()
+	{
+		for(int i = ActiveUnits.Count - 1; i >= 0;i--)
+		{
+			Unit unit = ActiveUnits[i];
+			unit.Die();
+			PushToPool(unit);
+		}
+		base.RespawnMe ();
+	}
+
+	public override void Respawn ()
+	{
+		base.Respawn ();
+
+	}
 }

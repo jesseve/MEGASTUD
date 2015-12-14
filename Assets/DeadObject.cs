@@ -17,8 +17,23 @@ public class DeadObject : MonoBehaviour {
         objThatDied = died;
         _anim.Play("DiePoof");
     }
+
     public void End() {
-        objThatDied.SetActive(false);
+		if(objThatDied != null)
+		{
+			if(objThatDied.activeInHierarchy)
+			{
+				BuildingBase building = objThatDied.GetComponent<BuildingBase>();
+	        	
+				if(building == null)
+					objThatDied.SetActive(false);
+				else
+				{
+					Debug.Log("Starting Respawn");
+					building.RespawnMe();
+				}
+			}
+		}
         DeadHandler.EndAnimation(this);
     }
 }
