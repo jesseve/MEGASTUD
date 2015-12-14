@@ -92,15 +92,15 @@ public abstract class Unit : MonoBehaviour, IDamageable
 		else SearchForTarget();
     }
 
-    protected void SetAnimator(string parameter, bool value) {        
+    protected void SetAnimator(string parameter) {        
         if (_animator != null)
         {
             try
             {
-                _animator.SetBool(parameter, value);
+                _animator.Play(parameter);
             }
             catch (Exception e) {
-                Debug.Log("virhe: " + parameter + " value: " + value);
+                Debug.Log("virhe: " + parameter);
             }
         }
     }    
@@ -113,7 +113,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _sprite.flipX = (point.x < _transform.position.x);
         targetPoint = point;
         isMoving = true;
-        SetAnimator("isMoving", isMoving);
+        SetAnimator("Walking");
     }
     public virtual void Move()
     {
@@ -126,7 +126,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     
     protected virtual void EndMove() {
         isMoving = false;
-        SetAnimator("isMoving", isMoving);
+        //SetAnimator("Idle");
     }
     public void HandleSelection(bool selected) { 
 		if(unitSelector != null)
@@ -146,12 +146,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
             if (dst > sqrRange)
             {
                 movingToTarget = true;
-                SetAnimator("isMoving", true);
+                SetAnimator("Walking");
             }
             else
             {
                 isAttacking = true;
-                SetAnimator("isAttacking", isAttacking);
 
                 attackTimer = fireRate;
 
@@ -175,11 +174,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
 			_audio.clip = SoundManager.GetSoundClip(attackSound);
 			_audio.Play();
             attackTimer = 0;
+            SetAnimator("Attack");
             if (unitToAttack.TakeDamage(damage) == true)
             {
                 unitToAttack = null;
                 isAttacking = false;
-                SetAnimator("isAttacking", isAttacking);
 				MoveToHQ();
             }
         }
@@ -192,8 +191,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
         if (attackPosition == _transform.position) {
             movingToTarget = false;
             isAttacking = true;
-            SetAnimator("isMoving", false);
-            SetAnimator("isAttacking", isAttacking);
 
             attackTimer = fireRate;
         }
