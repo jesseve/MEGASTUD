@@ -22,6 +22,8 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	public float respawnTime = 0f;
 	public GameObject demolishedBuilding;
 
+    protected bool update = true;
+
     protected int currentAttackers;
     protected int currentLevel;
     protected Animator _animator;
@@ -74,6 +76,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	
 	// Update is called once per frame
 	protected virtual void Update () {
+        if (update == false) return;
 		if(dealDamage)
 			DealDamageAOE();
 	}
@@ -130,7 +133,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public void Stop()
     {
         _animator.Play("Idle");
-        this.enabled = false;
+        update = false;   
     }
 
     public bool IsDead() {

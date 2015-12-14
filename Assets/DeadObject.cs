@@ -12,7 +12,7 @@ public class DeadObject : MonoBehaviour {
     public void PlayAnimation(Vector3 location, Color primary, Color secondary, GameObject died, float size = 1) {
         primaryColorSprite.color = primary;
         secondaryColorSprite.color = secondary;
-        transform.localScale *= size;
+        transform.localScale = Vector3.one * size;
         transform.position = location;
         objThatDied = died;
         _anim.Play("DiePoof");

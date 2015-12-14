@@ -12,6 +12,10 @@ public abstract class EnemyUnitBase : Unit
             
     public override void Spawn()
     {
+        isMoving = false;
+        isAttacking = false;
+        health = maxHealth;
+
         GameObject hq = GameObject.FindGameObjectWithTag("PlayerHQ");
         if(hq != null)
             playerHQ = hq.GetComponent<BuildingBase>();

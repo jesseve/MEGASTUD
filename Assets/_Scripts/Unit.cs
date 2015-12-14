@@ -25,6 +25,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public Color primary;
     public Color secondary;
 
+    protected bool update = true;
+
     public SpawningBuilding _spawner;
 
     [Range(1, 4)]
@@ -44,6 +46,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected Vector3 attackPosition;
     protected int sqrRange;
 	protected BuildingBase targetBuilding;
+    protected float maxHealth;
 
     //Components
     protected Transform _transform;
@@ -76,6 +79,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _health = GetComponentInChildren<HealthBar>();
 		_audio = GetComponent<AudioSource>();
 		_moveLine = GetComponent<LineRenderer>();
+
+        maxHealth = health;
 		if(_moveLine != null)
 		{
 			_moveLine.SetVertexCount(2);
@@ -97,6 +102,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     protected virtual void FixedUpdate()
     {
+        if (update == false) return;
         if (isMoving == true)
 		{
             Move();
@@ -274,8 +280,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void Stop()
     {
+        isAttacking = false;
+        isMoving = false;
+        Debug.Log(name + " Stopped");
         SetAnimator("Idle");
-        this.enabled = false;
+        update = false;      
     }
     public Vector3 GetPosition()
     {

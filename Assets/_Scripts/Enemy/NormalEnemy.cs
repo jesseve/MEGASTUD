@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class NormalEnemy : SpawningBuilding {
 
     public EnemyWave[] waves;
-    protected int currentWave = 0;
+    protected int currentWave = 0;    
 
     protected override void Start()
     {
@@ -26,9 +26,26 @@ public class NormalEnemy : SpawningBuilding {
             currentWave++;
         }
         else {
-            //Last wave was sent
+            SpawnUnits(unitTypesToUse[waves[waves.Length - 1].enemyToSpawn]);
         }
     }
+
+    protected override void CreateUnitPool()
+    {
+        FreeUnits = new List<Unit>();
+        ActiveUnits = new List<Unit>();
+
+        for (int i = 0; i < unitTypesToUse.Length; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                Unit e = CreateEnemy(unitTypesToUse[i].unitType);
+                FreeUnits.Add(e);
+                e.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public override void SpawnUnits(Unit type)
     {
 

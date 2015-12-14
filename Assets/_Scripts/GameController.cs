@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour {
 
 	public delegate void Respawn();
 	public static event Respawn RespawnEvent;
+    
+    private bool gameEnded;
 
 	[SerializeField] private float checkTime = 5f;
 	[SerializeField] private float moneyAmount;
@@ -44,6 +46,8 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (gameEnded == true) return;
 
 		if(RespawnEvent != null)
 			RespawnEvent();
