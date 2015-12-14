@@ -52,12 +52,6 @@ public class ConstructionController : MonoBehaviour {
 					initialized = true;
 					return;
 				} 
-				else
-				{
-					foreach(RaycastResult result in objects)
-						Debug.Log(result.gameObject.name);
-					return;
-				}
 
 			}
 
@@ -151,7 +145,6 @@ public class ConstructionController : MonoBehaviour {
 
 	private void CancelBuilding() 
 	{
-		Debug.Log("WHY CANCEL!");
 		Destroy(currentBuilding.gameObject);
 	}
 }

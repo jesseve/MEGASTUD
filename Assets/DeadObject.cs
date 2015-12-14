@@ -29,7 +29,6 @@ public class DeadObject : MonoBehaviour {
 					objThatDied.SetActive(false);
 				else
 				{
-					Debug.Log("Starting Respawn");
 					building.RespawnMe();
 				}
 			}

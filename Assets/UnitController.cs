@@ -50,7 +50,6 @@ public class UnitController : MonoBehaviour {
 
 		if(!constructionController.CheckMouseAvailability() || objects.Count > 0)
 		{
-			Debug.Log("RETURN");
 			return;
 		}
 

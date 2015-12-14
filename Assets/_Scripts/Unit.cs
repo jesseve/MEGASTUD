@@ -284,7 +284,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
     {
         isAttacking = false;
         isMoving = false;
-        Debug.Log(name + " Stopped");
         SetAnimator("Idle");
         update = false;      
     }

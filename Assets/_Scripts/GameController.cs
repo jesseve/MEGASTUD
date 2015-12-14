@@ -223,14 +223,12 @@ public class GameController : MonoBehaviour {
     private void WinGame() {
         StopObjects();
         gameEnded = true;
-        gameEnd.EndGame(true);
-        Debug.Log("HIHHIHHII");                
+        gameEnd.EndGame(true);           
     }
     private void LoseGame() {
         StopObjects();
         gameEnded = true;
         gameEnd.EndGame(false);
-        Debug.Log("Hävisit pelin");
     }
 
     private void StopObjects() {

@@ -126,7 +126,6 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
         }
     }
     public void Die() {
-		Debug.Log("DIE DIE DIE MY DARLING!");
         gameController.HQDown(this);
         gameObject.layer = LayerMask.NameToLayer("Default");
         _animator.Play("Die");
