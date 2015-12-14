@@ -7,7 +7,10 @@ public class PlayerSpawner : SpawningBuilding {
     public float maxRange = 2;
 
 	protected override void Update ()
-	{}
+	{
+		if(dealDamage)
+			DealDamageAOE();
+	}
 
     protected override void CreateUnitPool()
     {
@@ -70,6 +73,11 @@ public class PlayerSpawner : SpawningBuilding {
         dir = Quaternion.Euler(angle) * dir;
         targetPos = _transform.position + dir;
         unit.transform.position = targetPos;
+		if(buildingType == BuildingType.DefensiveSpawner)
+		{
+			DefensiveUnit defUnit = unit.GetComponent<DefensiveUnit>();
+			defUnit.SetInitPos(_transform.position);
+		}
     }
 
 	public override void RespawnMe ()

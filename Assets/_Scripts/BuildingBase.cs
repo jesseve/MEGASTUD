@@ -5,6 +5,11 @@ using UnityEngine.Events;
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
 	public BuildingType buildingType = BuildingType.None;
+	public bool dealDamage = false;
+	public LayerMask targetLayer;
+	public float aoeInterval = 2f;
+	public int aoeRange;
+	public float aoeDamage;
     public float health;
     public float moneyCost = 0;
     public float energyCost = 0;
@@ -20,6 +25,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     protected int currentLevel;
     protected Animator _animator;
     protected HealthBar _health;
+	protected float _aoeTimer;
 
     protected Transform _transform;
 	protected GameController gameController;
@@ -40,6 +46,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		defaultLayer = gameObject.layer;
 		if(demolishedBuilding != null)
 			demolishedBuilding.SetActive(false);
+		_aoeTimer = aoeInterval;
 	}
 	
     
@@ -57,7 +64,8 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	
 	// Update is called once per frame
 	protected virtual void Update () {
-		
+		if(dealDamage)
+			DealDamageAOE();
 	}
 
     public virtual void Upgrade() {
@@ -114,18 +122,23 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public Vector3 GetPosition() {
         return _transform.position;
     }
-    public bool Target() {
+	public bool Target(ref BuildingBase building) {
 
         if (currentAttackers < maxAttackers) {
 
             currentAttackers++;
-
+			building = this;
             return true;
         }
         else {
             return false;
         }
     }
+
+	public void RemoveAttacker()
+	{
+		currentAttackers--;
+	}
 
 	public virtual void RespawnMe()
 	{
@@ -152,11 +165,6 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	public virtual void Respawn()
 	{
 		respawnTimer -= Time.deltaTime;
-//		if(demolishedBuilding != null)
-//		{
-//			if(!demolishedBuilding.transform.parent.gameObject.activeInHierarchy)
-//				demolishedBuilding.transform.parent.gameObject.SetActive(true);
-//		}
 
 		if(respawnTimer <= 0)
 		{
@@ -176,6 +184,23 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 			if(col != null)
 				col.enabled = true;
 			respawning = false;
+		}
+	}
+
+	protected virtual void DealDamageAOE()
+	{
+
+		_aoeTimer -= Time.deltaTime;
+		if(_aoeTimer <= 0f)
+		{	
+			_aoeTimer = aoeInterval;
+			Collider2D[] targets = Physics2D.OverlapCircleAll(_transform.position, aoeRange, targetLayer);
+			foreach(Collider2D col in targets)
+			{
+				IDamageable target = col.GetComponent<IDamageable>();
+				if(target != null)
+					target.TakeDamage(aoeDamage);
+			}
 		}
 	}
 

@@ -7,7 +7,8 @@ using System.Collections.Generic;
 public abstract class Unit : MonoBehaviour, IDamageable
 {
 
-    //public members    
+    //public members
+	public SoundClip attackSound = SoundClip.Attack;
 	public float moneyCost;
 	public float energyCost;
     public int range;
@@ -39,15 +40,22 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected bool movingToTarget;
     protected Vector3 attackPosition;
     protected int sqrRange;
+	protected BuildingBase targetBuilding;
 
     //Components
     protected Transform _transform;
     protected Animator _animator;
     protected SpriteRenderer _sprite;
     protected HealthBar _health;
-    public AudioSource _audio;
-    public AudioClip[] unitSounds;
+	protected AudioSource _audio;
 
+	private LayerMask defaultLayer = -1;
+
+	void OnEnable()
+	{
+		if(defaultLayer != -1)
+			gameObject.layer = defaultLayer;
+	}
     // Use this for initialization
     protected virtual void Awake()
     {
@@ -55,6 +63,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
         _health = GetComponentInChildren<HealthBar>();
+		_audio = GetComponent<AudioSource>();
         if(_health != null)
             _health.Init(health);
                
@@ -65,6 +74,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
         sqrRange = range * range;
 		HandleSelection(false);
+
+		defaultLayer = gameObject.layer;
     }
     protected virtual void FixedUpdate()
     {
@@ -127,11 +138,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
         if (isAttacking == true || movingToTarget == true) return;
         EndMove();
 
-        if (target.Target())
+		if (target.Target(ref targetBuilding))
         {
             unitToAttack = target;
             attackPosition = target.GetAttackPosition(_transform.position);
-            float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
+			float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
             if (dst > sqrRange)
             {
                 movingToTarget = true;
@@ -139,7 +150,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
             }
             else
             {
-				Debug.Log("Echo base we're commencing our attack run!");
                 isAttacking = true;
                 SetAnimator("isAttacking", isAttacking);
 
@@ -159,9 +169,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
         //Check if the unit is in range to attack
         attackTimer += Time.fixedDeltaTime;
-
+		_sprite.flipX = (unitToAttack.GetPosition().x < _transform.position.x);
         if (attackTimer >= fireRate)
         {
+			_audio.clip = SoundManager.GetSoundClip(attackSound);
+			_audio.Play();
             attackTimer = 0;
             if (unitToAttack.TakeDamage(damage) == true)
             {
@@ -189,7 +201,6 @@ public abstract class Unit : MonoBehaviour, IDamageable
     protected virtual void SearchForTarget()
     {
 		if (unitToAttack != null) return;
-		Debug.Log("Searching for targets");
         Collider2D c = Physics2D.OverlapCircle(_transform.position, visionRange, attackLayer);
         if (c != null)
         {
@@ -230,6 +241,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void Die()
     {
+		if(targetBuilding != null)
+			targetBuilding.RemoveAttacker();
         gameObject.layer = LayerMask.NameToLayer("Default");
         _animator.Play("Die");
     }
@@ -242,8 +255,9 @@ public abstract class Unit : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
         DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject);
     }
-    public bool Target()
+	public bool Target(ref BuildingBase building)
     {
+		building = null;
         return true;
     }
     public Vector3 GetAttackPosition(Vector3 pos) {

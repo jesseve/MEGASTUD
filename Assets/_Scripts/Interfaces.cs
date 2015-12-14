@@ -7,6 +7,6 @@ public interface IDamageable
     Vector3 GetPosition();
     bool IsDead();
     void Die();
-    bool Target();
+	bool Target(ref BuildingBase building);
     Vector3 GetAttackPosition(Vector3 position);
 }
