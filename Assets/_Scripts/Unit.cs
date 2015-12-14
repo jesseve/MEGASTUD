@@ -25,6 +25,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public Color primary;
     public Color secondary;
 
+    public SpawningBuilding _spawner;
+
     [Range(1, 4)]
     public int size = 1;        //determine how many can be spawned by the ai
 
@@ -270,6 +272,11 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
         return false;
     }
+    public void Stop()
+    {
+        SetAnimator("Idle");
+        this.enabled = false;
+    }
     public Vector3 GetPosition()
     {
         return _transform.position;
@@ -287,7 +294,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void DieAnim()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        _spawner.PushToPool(this);
         DeadHandler.PlayAnimation(_transform.position, primary, secondary, gameObject);
     }
 	public bool Target(ref BuildingBase building)

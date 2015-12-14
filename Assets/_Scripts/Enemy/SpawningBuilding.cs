@@ -12,6 +12,8 @@ public abstract class SpawningBuilding : BuildingBase
     public int spawnCount;
 	public float spawnRange;
 
+    public List<Unit> ActiveTroops { get { return ActiveUnits; } }
+
     //protected members
     [SerializeField]protected List<Unit> FreeUnits;
     [SerializeField]protected List<Unit> ActiveUnits;
@@ -91,7 +93,7 @@ public abstract class SpawningBuilding : BuildingBase
             ActiveUnits.Add(unit);
         return unit;
     }
-    protected void PushToPool(Unit unit) {
+    public void PushToPool(Unit unit) {
         ActiveUnits.Remove(unit);
         FreeUnits.Add(unit);
         unit.gameObject.SetActive(false);
@@ -105,7 +107,9 @@ public abstract class SpawningBuilding : BuildingBase
                 GameObject go = Instantiate(e.gameObject) as GameObject;
                 //go.tag = tag;
                 go.transform.SetParent(transform);
-                return go.GetComponent<Unit>();
+                Unit u = go.GetComponent<Unit>();
+                u._spawner = this;
+                return u;
             }
         }
         return null;

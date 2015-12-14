@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private BuildingBase playerHeadquarters = null;
 	[SerializeField] private Image resourceBar = null;
 
+    private List<NormalEnemy> enemies;
+    private GameEnd gameEnd;
+
 	private float checkTimer;
 	private float resourceTimer;
 	private List<BuildingBase> activeBuildings;
@@ -31,6 +34,12 @@ public class GameController : MonoBehaviour {
 		activeBuildings = new List<BuildingBase>();
 		buildingsInQueue = new List<BuildingBase>();
 		activeBuildings.Add(playerHeadquarters);
+
+        gameEnd = FindObjectOfType<GameEnd>();
+        enemies = new List<NormalEnemy>();
+        foreach(NormalEnemy n in FindObjectsOfType<NormalEnemy>()) {
+            enemies.Add(n);
+        }
 	}
 	
 	// Update is called once per frame
@@ -175,4 +184,38 @@ public class GameController : MonoBehaviour {
 		buildingsInQueue.Clear();
 		checkingBuildings = false;
 	}
+
+    public void HQDown(BuildingBase b) {
+        if (b.CompareTag("PlayerHQ"))
+            LoseGame();
+        else if (b is NormalEnemy) {
+            enemies.Remove(b as NormalEnemy);
+            if (enemies.Count <= 0) {
+                WinGame();
+            }
+        }
+    }
+
+    private void WinGame() {
+        StopObjects();
+        gameEnd.EndGame(true);
+        Debug.Log("HIHHIHHII");                
+    }
+    private void LoseGame() {
+        StopObjects();
+        gameEnd.EndGame(false);
+        Debug.Log("Hävisit pelin");
+    }
+
+    private void StopObjects() {
+        foreach (BuildingBase bb in activeBuildings)
+        {
+            if (bb is SpawningBuilding) {
+                foreach (Unit u in (bb as SpawningBuilding).ActiveTroops) {
+                    u.Stop();
+                }
+            }
+            bb.Stop();
+        }
+    }
 }

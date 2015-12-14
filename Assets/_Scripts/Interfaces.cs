@@ -9,4 +9,5 @@ public interface IDamageable
     void Die();
 	bool Target(ref BuildingBase building);
     Vector3 GetAttackPosition(Vector3 position);
+    void Stop();
 }

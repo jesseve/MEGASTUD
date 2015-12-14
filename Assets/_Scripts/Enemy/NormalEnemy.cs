@@ -38,7 +38,7 @@ public class NormalEnemy : SpawningBuilding {
             unit.Spawn();
             Vector3 targetPos = _transform.position + (Vector3.right * spawnRange);
             targetPos.z = -0.1f;
-            Vector3 angle = new Vector3(0, 0, (360 / 8.0f) * i); //z = 360 / maxCount * spawnedCount
+            Vector3 angle = new Vector3(0, 0, (360 / 12.0f) * i); //z = 360 / maxCount * spawnedCount
             Vector3 dir = targetPos - _transform.position;
             dir = Quaternion.Euler(angle) * dir;
             targetPos = _transform.position + dir;

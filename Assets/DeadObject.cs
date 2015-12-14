@@ -19,7 +19,7 @@ public class DeadObject : MonoBehaviour {
     }
 
     public void End() {
-		if(objThatDied != null)
+		if(objThatDied != null && objThatDied.activeSelf == true)
 		{
 			if(objThatDied.activeInHierarchy)
 			{
