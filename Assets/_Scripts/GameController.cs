@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
 	[SerializeField] private Text energyText = null;
 	[SerializeField] private BuildingBase playerHeadquarters = null;
 	[SerializeField] private Image resourceBar = null;
+	public Text nextWawe;
 
     private List<NormalEnemy> enemies;
     private GameEnd gameEnd;
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour {
 	private List<BuildingBase> activeBuildings;
 	private List<BuildingBase> buildingsInQueue;
 	private bool checkingBuildings;
+	private AudioSource _audio;
 
 	// Use this for initialization
 	void Awake () {
@@ -37,6 +39,7 @@ public class GameController : MonoBehaviour {
 		activeBuildings = new List<BuildingBase>();
 		buildingsInQueue = new List<BuildingBase>();
 		activeBuildings.Add(playerHeadquarters);
+		_audio = GetComponent<AudioSource>();
 
         gameEnd = FindObjectOfType<GameEnd>();
         enemies = new List<NormalEnemy>();
@@ -70,6 +73,21 @@ public class GameController : MonoBehaviour {
 		} else resourceTimer = checkTime;
 
 		resourceBar.fillAmount = checkTimer / checkTime;
+		if(spawnTimer > 0)
+		{
+			spawnTimer -= Time.deltaTime;
+			if(spawnTimer < 0)
+			{
+				spawnTimer = 0;
+				_audio.clip = SoundManager.GetSoundClip(SoundClip.Alarm);
+				_audio.Play();
+			}
+
+			int min = Mathf.RoundToInt(spawnTimer / 60);
+			int sec = Mathf.RoundToInt(spawnTimer % 60);
+			nextWawe.text = "Next Wave in " + min + ":"+sec;
+		}
+
 	}
 
 	public void AddResources(ResourceType resource, float amount)

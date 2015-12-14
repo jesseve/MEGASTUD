@@ -15,7 +15,7 @@ public abstract class EnemyUnitBase : Unit
         isMoving = false;
         isAttacking = false;
         health = maxHealth;
-
+		_health.UpdateHealthBar(health);
         GameObject hq = GameObject.FindGameObjectWithTag("PlayerHQ");
         if(hq != null)
             playerHQ = hq.GetComponent<BuildingBase>();

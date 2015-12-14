@@ -5,6 +5,8 @@ using UnityEngine.Events;
 public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
 	public BuildingType buildingType = BuildingType.None;
+	public SoundClip attackSound;
+	public SoundClip collapseSound;
 	public GameObject minimapIcon;
 	public bool dealDamage = false;
 	public LayerMask targetLayer;
@@ -39,6 +41,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 	private Sprite defaultSprite;
 	private LayerMask defaultLayer;
 	private bool respawning = false;
+	private AudioSource _audio;
 
 	void Awake()
 	{
@@ -50,6 +53,7 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		if(demolishedBuilding != null)
 			demolishedBuilding.SetActive(false);
 		_aoeTimer = aoeInterval;
+		_audio = GetComponent<AudioSource>();
 	}
 
 	protected virtual void OnEnable()
@@ -89,7 +93,8 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 
         Vector3 targetPos = _transform.position + (Vector3.right * attackRange);
         targetPos.z = -0.1f;
-        Vector3 angle = new Vector3(0, 0, 360 / maxAttackers * currentAttackers); //z = 360 / maxCount * spawnedCount
+		int maxAttackersCount = (maxAttackers != -1)?maxAttackers:8;
+		Vector3 angle = new Vector3(0, 0, 360 / maxAttackersCount * currentAttackers); //z = 360 / maxCount * spawnedCount
         Vector3 dir = targetPos - _transform.position;
         dir = Quaternion.Euler(angle) * dir;
         targetPos = _transform.position + dir;
@@ -172,6 +177,11 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		{
 			demolishedBuilding.SetActive(true);
 			demolishedBuilding.transform.gameObject.SetActive(true);
+			if(_audio != null)
+			{
+				_audio.clip = SoundManager.GetSoundClip(collapseSound);
+				_audio.Play();
+			}
 		}
 
 		Collider2D col = GetComponent<Collider2D>();
@@ -214,6 +224,11 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		_aoeTimer -= Time.deltaTime;
 		if(_aoeTimer <= 0f)
 		{
+			if(_audio != null)
+			{
+				_audio.clip = SoundManager.GetSoundClip(attackSound);
+				_audio.Play();
+			}
 			_aoeTimer = aoeInterval;
 			Collider2D[] targets = Physics2D.OverlapCircleAll(_transform.position, aoeRange, targetLayer);
 			if(targets.Length > 0)

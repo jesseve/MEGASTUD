@@ -9,7 +9,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     //public members
 	public GameObject minimapIcon;
-	public SoundClip attackSound = SoundClip.Attack;
+	public SoundClip[] attackSound;
+	public SoundClip deathSound;
 	public float moneyCost;
 	public float energyCost;
     public int range;
@@ -215,7 +216,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
 		_sprite.flipX = (unitToAttack.GetPosition().x < _transform.position.x);
         if (attackTimer >= fireRate)
         {
-			_audio.clip = SoundManager.GetSoundClip(attackSound);
+			int index = UnityEngine.Random.Range(0, attackSound.Length);
+			_audio.clip = SoundManager.GetSoundClip(attackSound[index]);
 			_audio.Play();
             attackTimer = 0;
             SetAnimator("Attack");
@@ -292,6 +294,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     }
     public void Die()
     {
+		_audio.clip = SoundManager.GetSoundClip(deathSound);
+		_audio.Play();
 		if(targetBuilding != null)
 			targetBuilding.RemoveAttacker();
         gameObject.layer = LayerMask.NameToLayer("Default");

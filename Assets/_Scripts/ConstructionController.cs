@@ -21,6 +21,7 @@ public class ConstructionController : MonoBehaviour {
 	private Rigidbody2D currentRB;
 	private Animator currentAnim;
 	private CheckSlotAvailability obstacleDetector;
+	private AudioSource _audio;
 
 	private Camera mainCam;
 	private GameController gameController;
@@ -32,6 +33,7 @@ public class ConstructionController : MonoBehaviour {
 		mainCam = Camera.main;
 		gameController = GetComponent<GameController>();
 		unitController = GetComponent<UnitController>();
+		_audio = GetComponent<AudioSource>();
 	}
 
 	void Update()
@@ -93,10 +95,11 @@ public class ConstructionController : MonoBehaviour {
 		if(currentBuilding != null)
 			return;
 
+		_audio.clip = SoundManager.GetSoundClip(SoundClip.PlaceBuilding);
+		_audio.Play();
 		unitController.ClearSelection();
 		currentBuilding = Instantiate(buildingPrefabs[type]) as BuildingBase;
 		currentBuilding.underConstruction = true;
-
 		GameObject go = currentBuilding.gameObject;
 		go.layer = LayerMask.NameToLayer(ghostLayer);
 		obstacleDetector = go.gameObject.AddComponent<CheckSlotAvailability>();
