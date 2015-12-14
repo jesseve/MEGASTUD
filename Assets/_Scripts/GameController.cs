@@ -161,6 +161,9 @@ public class GameController : MonoBehaviour {
 					spawner.SpawnPlayerUnit();
 					remainingBuildings.RemoveAt(i);
 					break;
+				default: 
+					remainingBuildings.RemoveAt(i);
+					break;
 				}
 			}
 			yield return null;
