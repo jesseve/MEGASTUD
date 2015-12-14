@@ -1,9 +1,13 @@
 fileFormatVersion: 2
 guid: 93e0ff02c52c74c4798a5716526409a6
-timeCreated: 1450043811
+timeCreated: 1450108604
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: BuildingTurret_spritesheet_0
+    21300002: BuildingTurret_spritesheet_1
+    21300004: BuildingTurret_spritesheet_2
+    21300006: BuildingTurret_spritesheet_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +42,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +53,83 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: BuildingTurret_spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18, y: -17}
+        - {x: -18, y: -32}
+        - {x: 21, y: -32}
+        - {x: 25, y: -31}
+        - {x: 25, y: 29}
+        - {x: 8, y: 29}
+        - {x: -11, y: 20}
+    - name: BuildingTurret_spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 1, y: 28}
+        - {x: -18, y: -7}
+        - {x: -18, y: -32}
+        - {x: 24, y: -32}
+        - {x: 32, y: -16}
+        - {x: 32, y: 28}
+    - name: BuildingTurret_spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -29, y: 30}
+        - {x: -32, y: 20}
+        - {x: -32, y: -23}
+        - {x: -21, y: -32}
+        - {x: 17, y: -32}
+        - {x: 19, y: -28}
+        - {x: 19, y: -13}
+        - {x: 10, y: 30}
+      - - {x: 17, y: 12}
+        - {x: 20, y: 13}
+        - {x: 20, y: 16}
+        - {x: 17, y: 17}
+        - {x: 15, y: 15}
+    - name: BuildingTurret_spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -31, y: 19}
+        - {x: -32, y: 18}
+        - {x: -32, y: -26}
+        - {x: -24, y: -32}
+        - {x: 20, y: -32}
+        - {x: 20, y: 19}
     outline: []
   spritePackingTag: 
   userData: 
