@@ -150,6 +150,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
     
     protected virtual void EndMove() {
         isMoving = false;
+        SetAnimator("Idle");
 		if(_moveLine != null)
 			_moveLine.enabled = false;
         //SetAnimator("Idle");
