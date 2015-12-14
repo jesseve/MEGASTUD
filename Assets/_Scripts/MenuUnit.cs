@@ -40,8 +40,12 @@ public class MenuUnit : Unit {
 	}
 
 	private IEnumerator Timer () {
-		SetAnimator ("idle");
-		yield return new WaitForSeconds (1);
+        float f = Random.value;
+        if (f < 0.1f)
+            SetAnimator("Attack");
+        else
+            SetAnimator ("Idle");
+		yield return new WaitForSeconds (Random.Range(1,4));
 		index = index < wayPoints.Length - 1 ? index + 1 : 0;
 		StartMoving (wayPoints [index].position);
 	}
