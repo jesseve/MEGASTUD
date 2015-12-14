@@ -224,15 +224,17 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		_aoeTimer -= Time.deltaTime;
 		if(_aoeTimer <= 0f)
 		{
-			if(_audio != null)
-			{
-				_audio.clip = SoundManager.GetSoundClip(attackSound);
-				_audio.Play();
-			}
 			_aoeTimer = aoeInterval;
 			Collider2D[] targets = Physics2D.OverlapCircleAll(_transform.position, aoeRange, targetLayer);
 			if(targets.Length > 0)
+			{
+				if(_audio != null)
+				{
+					_audio.clip = SoundManager.GetSoundClip(attackSound);
+					_audio.Play();
+				}
 				_animator.Play("Attack");
+			}
 			
 			foreach(Collider2D col in targets)
 			{

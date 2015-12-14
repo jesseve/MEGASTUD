@@ -35,34 +35,34 @@ public class SoundManager  {
 
 	static private Dictionary<SoundClip, string> clipToName = new Dictionary<SoundClip, string>
 	{
-		{SoundClip.AttackOffensive1, "Attack"},
-		{SoundClip.AttackOffensive2, "Attack"},
-		{SoundClip.AttackOffensive3, "Attack"},
-		{SoundClip.AttackDefensive1, "Attack"},
-		{SoundClip.AttackDefensive2, "Attack"},
-		{SoundClip.AttackDefensive3, "Attack"},
-		{SoundClip.AttackDPS1,		 "Attack"},
-		{SoundClip.AttackDPS2,		 "Attack"},
-		{SoundClip.AttackDPS3,		 "Attack"},
-		{SoundClip.AttackTank1,		 "Attack"},
-		{SoundClip.AttackTank2,		 "Attack"},
-		{SoundClip.AttackTank3,		 "Attack"},
-		{SoundClip.AttackScout1, 	"Attack"},
-		{SoundClip.AttackScout2, 	"Attack"},
-		{SoundClip.AttackScout3, 	"Attack"},
-		{SoundClip.AttackHQ, 		"Attack"},
-		{SoundClip.AttackTurret, 	"Attack"},
-		{SoundClip.DieOffensive, 	"Die"},
-		{SoundClip.DieDefensive, 	"Die"},
-		{SoundClip.DieDPS, 			"Die"},
-		{SoundClip.DieTank, 		"Die"},
-		{SoundClip.DieScout, 		"Die"},
-		{SoundClip.CollapseHQ, 		"Die"},
-		{SoundClip.CollapseTurret, 	"Die"},
-		{SoundClip.CollapseResource,"Die"},
-		{SoundClip.CollapseSpawner, "Die"},
-		{SoundClip.PlaceBuilding, 	"Attack"},
-		{SoundClip.Alarm, 			"UnderAttack"}
+		{SoundClip.AttackOffensive1, "Offensive1Attack"},
+		{SoundClip.AttackOffensive2, "Offensive2Attack"},
+		{SoundClip.AttackOffensive3, "Offensive3Attack"},
+		{SoundClip.AttackDefensive1, "Defensive1Attack"},
+		{SoundClip.AttackDefensive2, "Defensive2Attack"},
+		{SoundClip.AttackDefensive3, "Defensive3Attack"},
+		{SoundClip.AttackDPS1,		 "DPS1Attack"},   
+		{SoundClip.AttackDPS2,		 "DPS2Attack"},   
+		{SoundClip.AttackDPS3,		 "DPS3Attack"},   
+		{SoundClip.AttackTank1,		 "TankAttack1"},
+		{SoundClip.AttackTank2,		 "TankAttack2"},
+		{SoundClip.AttackTank3,		 "TankAttack3"},
+		{SoundClip.AttackScout1, 	 "ScoutAttack1"},
+		{SoundClip.AttackScout2, 	 "ScoutAttack2"},
+		{SoundClip.AttackScout3, 	 "ScoutAttack3"},
+		{SoundClip.AttackHQ, 		 "AttackHQ"},
+		{SoundClip.AttackTurret, 	 "AttackTurret"},
+		{SoundClip.DieOffensive, 	 "DieOffensive"},
+		{SoundClip.DieDefensive, 	 "DieDefensive"},
+		{SoundClip.DieDPS, 			 "DieDPS"},
+		{SoundClip.DieTank, 		 "DieTank"},
+		{SoundClip.DieScout, 		 "DieScout"},
+		{SoundClip.CollapseHQ, 		 "CollapseHQ"},
+		{SoundClip.CollapseTurret, 	 "CollapseTurret"},
+		{SoundClip.CollapseResource, "CollapseResource"},
+		{SoundClip.CollapseSpawner,  "CollapseSpawner"},
+		{SoundClip.PlaceBuilding, 	 "PlaceBuilding"},
+		{SoundClip.Alarm, 			 "Alarm"}
 	};
 
 
@@ -72,7 +72,7 @@ public class SoundManager  {
 	{
 		int index = (int)soundClip;
 		if(soundClips[index] == null)
-			soundClips[index] = Resources.Load("SoundClips/"+clipToName[soundClip], typeof(AudioClip)) as AudioClip;
+			soundClips[index] = Resources.Load("Audio/"+clipToName[soundClip], typeof(AudioClip)) as AudioClip;
 		
 		return soundClips[index];
 	}
