@@ -143,9 +143,9 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
     public Vector3 GetPosition() {
         return _transform.position;
     }
-	public bool Target(ref BuildingBase building) {
+	public bool Target(ref BuildingBase building) {        
 
-        if (currentAttackers < maxAttackers) {
+        if (maxAttackers == -1 || currentAttackers < maxAttackers) {
 
             currentAttackers++;
 			building = this;

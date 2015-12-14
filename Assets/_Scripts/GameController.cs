@@ -8,8 +8,8 @@ public class GameController : MonoBehaviour {
 
 	public delegate void Respawn();
 	public static event Respawn RespawnEvent;
-    
-    private bool gameEnded;
+
+    public float spawnTimer;
 
 	[SerializeField] private float checkTime = 5f;
 	[SerializeField] private float moneyAmount;
@@ -21,8 +21,9 @@ public class GameController : MonoBehaviour {
 
     private List<NormalEnemy> enemies;
     private GameEnd gameEnd;
+    private bool gameEnded;
 
-	private float checkTimer;
+    private float checkTimer;
 	private float resourceTimer;
 	private List<BuildingBase> activeBuildings;
 	private List<BuildingBase> buildingsInQueue;
