@@ -1,9 +1,13 @@
 fileFormatVersion: 2
 guid: c718cd1a9c5a56e42bdc6492b69eb255
-timeCreated: 1450043811
+timeCreated: 1450122112
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: TerrainDecals_Trees_Atlas_0
+    21300002: TerrainDecals_Trees_Atlas_1
+    21300004: TerrainDecals_Trees_Atlas_2
+    21300006: TerrainDecals_Trees_Atlas_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +42,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +53,114 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: TerrainDecals_Trees_Atlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28, y: 57}
+        - {x: -63, y: 49}
+        - {x: -63, y: -10}
+        - {x: -61, y: -14}
+        - {x: -27, y: -40}
+        - {x: -14, y: -46}
+        - {x: -10, y: -43}
+        - {x: -20, y: -55}
+        - {x: -23, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 48}
+        - {x: 42, y: 57}
+    - name: TerrainDecals_Trees_Atlas_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -64, y: 57}
+        - {x: -64, y: -26}
+        - {x: -22, y: -64}
+        - {x: 61, y: -64}
+        - {x: 63, y: -58}
+        - {x: 63, y: 57}
+    - name: TerrainDecals_Trees_Atlas_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 58, y: 31}
+        - {x: 40, y: 28}
+        - {x: 51, y: 41}
+        - {x: 50, y: 47}
+        - {x: 24, y: 58}
+        - {x: 18, y: 58}
+        - {x: 3, y: 31}
+        - {x: -4, y: 22}
+        - {x: -10, y: 23}
+        - {x: -12, y: 21}
+        - {x: -12, y: 12}
+        - {x: -16, y: 25}
+        - {x: -6, y: 23}
+        - {x: 3, y: 32}
+        - {x: 10, y: 51}
+        - {x: 12, y: 58}
+        - {x: -48, y: 58}
+        - {x: -47, y: 47}
+        - {x: -35, y: 42}
+        - {x: -27, y: 41}
+        - {x: -42, y: 42}
+        - {x: -44, y: 33}
+        - {x: -41, y: 32}
+        - {x: -38, y: 32}
+        - {x: -38, y: 30}
+        - {x: -40, y: 32}
+        - {x: -45, y: 32}
+        - {x: -45, y: 37}
+        - {x: -43, y: 44}
+        - {x: -47, y: 46}
+        - {x: -54, y: 40}
+        - {x: -54, y: -27}
+        - {x: -44, y: -60}
+        - {x: 15, y: -60}
+        - {x: 18, y: -58}
+        - {x: 20, y: -52}
+        - {x: 59, y: -1}
+        - {x: 59, y: 31}
+    - name: TerrainDecals_Trees_Atlas_3
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28, y: 60}
+        - {x: -31, y: 59}
+        - {x: -44, y: 27}
+        - {x: -44, y: -62}
+        - {x: 39, y: -62}
+        - {x: 39, y: 58}
+        - {x: 37, y: 60}
     outline: []
   spritePackingTag: 
   userData: 
