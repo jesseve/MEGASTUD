@@ -21,7 +21,7 @@ public class TurretScript : BuildingBase {
 
 	void FixedUpdate ()
 	{
-		if(IsDead())
+		if(IsDead() || underConstruction)
 			return;
 		
 		if(targetUnit == null)
