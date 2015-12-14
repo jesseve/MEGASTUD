@@ -203,9 +203,11 @@ public abstract class BuildingBase : MonoBehaviour, IDamageable {
 		_aoeTimer -= Time.deltaTime;
 		if(_aoeTimer <= 0f)
 		{
-            _animator.Play("Attack");
 			_aoeTimer = aoeInterval;
 			Collider2D[] targets = Physics2D.OverlapCircleAll(_transform.position, aoeRange, targetLayer);
+			if(targets.Length > 0)
+				_animator.Play("Attack");
+			
 			foreach(Collider2D col in targets)
 			{
 				IDamageable target = col.GetComponent<IDamageable>();
