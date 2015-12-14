@@ -53,6 +53,7 @@ public class TurretScript : BuildingBase {
 		spriteRend.flipX = !(targetPos.x < _transform.position.x);
 		if(_aoeTimer <= 0)
 		{
+            _animator.Play("Attack");
 			_aoeTimer = aoeInterval;
 			ProjectileScript projectile = Instantiate(projectilePrefab, _transform.position, Quaternion.identity) as ProjectileScript;
 			float angle = Mathf.Atan2( _transform.position.y -targetPos.y, _transform.position.x - targetPos.x) * Mathf.Rad2Deg;
@@ -65,5 +66,7 @@ public class TurretScript : BuildingBase {
 			}
 		}
 	}
+
+    private void InvokedAttack() { }
 
 }

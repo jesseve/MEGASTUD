@@ -15,6 +15,11 @@ public class GameEnd : MonoBehaviour {
         if (gameOverScreen == null)
             gameOverScreen = GameObject.Find("GameOverScreen");
         gameOverScreen.SetActive(false);
+
+
+        //TODO gameover
+        //if (restart != null)
+            //restart.onClick.AddListener(() =>);
 	}
 	
     public void EndGame(bool win) {

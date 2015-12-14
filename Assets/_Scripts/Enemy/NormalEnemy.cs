@@ -8,7 +8,7 @@ public class NormalEnemy : SpawningBuilding {
 
     protected override void Start()
     {
-        base.Start();
+        base.Start();        
         spawnRate = waves[currentWave].timeToWait;
         spawnCount = waves[currentWave].enemyCount;
     }
@@ -19,10 +19,11 @@ public class NormalEnemy : SpawningBuilding {
     public override void Spawn()
     {
         if (currentWave < waves.Length)
-        {
+        {            
             SpawnUnits(unitTypesToUse[waves[currentWave].enemyToSpawn]);            
             spawnRate = waves[currentWave].timeToWait;
             spawnCount = waves[currentWave].enemyCount;
+            gameController.spawnTimer = spawnRate;
             currentWave++;
         }
         else {

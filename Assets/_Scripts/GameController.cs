@@ -8,8 +8,8 @@ public class GameController : MonoBehaviour {
 
 	public delegate void Respawn();
 	public static event Respawn RespawnEvent;
-    
-    private bool gameEnded;
+
+    public float spawnTimer;
 
 	[SerializeField] private float checkTime = 5f;
 	[SerializeField] private float moneyAmount;
@@ -21,8 +21,9 @@ public class GameController : MonoBehaviour {
 
     private List<NormalEnemy> enemies;
     private GameEnd gameEnd;
+    private bool gameEnded;
 
-	private float checkTimer;
+    private float checkTimer;
 	private float resourceTimer;
 	private List<BuildingBase> activeBuildings;
 	private List<BuildingBase> buildingsInQueue;
@@ -190,23 +191,26 @@ public class GameController : MonoBehaviour {
 	}
 
     public void HQDown(BuildingBase b) {
+        if (gameEnded == true) return;
         if (b.CompareTag("PlayerHQ"))
             LoseGame();
         else if (b is NormalEnemy) {
             enemies.Remove(b as NormalEnemy);
             if (enemies.Count <= 0) {
-                WinGame();
+                WinGame();                
             }
         }
     }
 
     private void WinGame() {
         StopObjects();
+        gameEnded = true;
         gameEnd.EndGame(true);
         Debug.Log("HIHHIHHII");                
     }
     private void LoseGame() {
         StopObjects();
+        gameEnded = true;
         gameEnd.EndGame(false);
         Debug.Log("Hävisit pelin");
     }
