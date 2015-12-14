@@ -51,6 +51,7 @@ public abstract class Unit : MonoBehaviour, IDamageable
 	protected AudioSource _audio;
 
 	private LayerMask defaultLayer = -1;
+	private LineRenderer _moveLine;
 
 
 	protected virtual void OnEnable()
@@ -72,6 +73,13 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _sprite = GetComponent<SpriteRenderer>();
         _health = GetComponentInChildren<HealthBar>();
 		_audio = GetComponent<AudioSource>();
+		_moveLine = GetComponent<LineRenderer>();
+		if(_moveLine != null)
+		{
+			_moveLine.SetVertexCount(2);
+			_moveLine.SetPosition(0, _transform.position + new Vector3(0, -0.2f, 0));
+			_moveLine.SetPosition(1, _transform.position + new Vector3(0, -0.2f, 0));
+		}
         if(_health != null)
             _health.Init(health);
                
@@ -121,11 +129,19 @@ public abstract class Unit : MonoBehaviour, IDamageable
         _sprite.flipX = (point.x < _transform.position.x);
         targetPoint = point;
         isMoving = true;
+		if(_moveLine != null)
+		{
+			_moveLine.SetVertexCount(2);
+			_moveLine.SetPosition(1, point);
+			_moveLine.enabled = true;
+		}
         SetAnimator("Walking");
     }
     public virtual void Move()
     {
         _transform.position = Vector3.MoveTowards(_transform.position, targetPoint, speed);
+		if(_moveLine != null)
+			_moveLine.SetPosition(0, _transform.position + new Vector3(0, -0.2f, 0));
         if (_transform.position == targetPoint)
         {
             EndMove();
@@ -134,11 +150,15 @@ public abstract class Unit : MonoBehaviour, IDamageable
     
     protected virtual void EndMove() {
         isMoving = false;
+		if(_moveLine != null)
+			_moveLine.enabled = false;
         //SetAnimator("Idle");
     }
     public void HandleSelection(bool selected) { 
 		if(unitSelector != null)
 			unitSelector.SetActive	(selected);
+		if(_moveLine != null)
+			_moveLine.enabled = isMoving;
 	}
 
     public virtual void StartAttack(IDamageable target)
@@ -153,7 +173,14 @@ public abstract class Unit : MonoBehaviour, IDamageable
 			float dst = (target.GetPosition() - _transform.position).sqrMagnitude;
             if (dst > sqrRange)
             {
-                movingToTarget = true;
+
+				if(_moveLine != null)
+				{
+					_moveLine.SetVertexCount(2);
+					_moveLine.SetPosition(1, attackPosition);
+					_moveLine.enabled = true;
+				}
+				movingToTarget = true;
                 SetAnimator("Walking");
             }
             else
@@ -194,7 +221,9 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     protected virtual void MoveToTarget() {
         
-        _transform.position = Vector3.MoveTowards(_transform.position, attackPosition, speed);
+		_transform.position = Vector3.MoveTowards(_transform.position, attackPosition, speed);
+		if(_moveLine != null)
+			_moveLine.SetPosition(0, _transform.position + new Vector3(0, -0.2f, 0));
 
         if (attackPosition == _transform.position) {
             movingToTarget = false;
